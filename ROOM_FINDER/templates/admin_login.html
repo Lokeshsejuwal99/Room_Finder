@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login - Room Finder</title>
+    <style>
+        /* Base Styles */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Verdana', sans-serif;
+            background: radial-gradient(circle, #1e1e2f, #141423);
+            color: #ffffff;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Wrapper for both sections */
+        .main-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 100vh;
+            padding: 0 40px;
+        }
+
+        /* Left Section */
+        .left-section {
+            width: 50%;
+            padding: 40px;
+            text-align: center;
+            color: white;
+            background: linear-gradient(135deg, #1e1e2f, #141423);
+            border-radius: 10px 0 0 10px;
+            box-shadow: 4px 0px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .left-section h1 {
+            font-size: 36px;
+            margin-bottom: 20px;
+            color:rgb(255, 0, 0);
+        }
+
+        .left-section p {
+            font-size: 16px;
+            margin-bottom: 15px;
+            color: #ffffff;
+        }
+
+        .left-section .decor img {
+            margin-top: 20px;
+            max-width: 80%;
+            border-radius: 10px;
+        }
+
+        /* Right Section (Admin Login) */
+        .auth-container {
+            width: 40%;
+            max-width: 400px;
+            margin-left: auto;
+            padding: 40px;
+        }
+
+        .auth-container h2 {
+            margin-bottom: 30px;
+            margin-left: 80px;
+            font-size: 26px;
+            font-weight: bold;
+            color: rgb(255, 0, 0);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 8px;
+            color: #cccccc;
+            text-align: left;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+            color: black;
+            outline: none;
+        }
+
+        .form-group input:focus {
+            border-color: #ffcc00;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 14px;
+            font-size: 18px;
+            color: #141423;
+            background: linear-gradient(45deg, rgb(255, 0, 0), rgb(255, 0, 0));
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .btn:hover {
+            background: rgb(232, 43, 10);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        p {
+            margin-top: 20px;
+            font-size: 14px;
+            color: #aaaaaa;
+        }
+
+        p a {
+            color: red;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        p a:hover {
+            text-decoration: underline;
+        }
+
+        /* Error Message */
+        .error-message {
+            background-color: #ff0000;
+            color: #ffffff;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            text-shadow: 0px 0px 5px rgba(0, 0, 0, 0.8);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .main-container {
+                flex-direction: column;
+                padding: 20px;
+            }
+
+            .left-section,
+            .auth-container {
+                width: 100%;
+                margin: 10px 0;
+                border-radius: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="main-container">
+        <!-- Left Side: Decoration/Text -->
+        <div class="left-section">
+            <h1>Welcome, Admin!</h1>
+            <p>Manage rooms, oversee bookings, and ensure seamless service.</p>
+            <p><strong>Your leadership matters!</strong></p>
+            <div class="decor">
+            </div>
+        </div>
+
+        <!-- Right Side: Admin Login -->
+        <div class="auth-container">
+            <h2>Admin Login</h2>
+            {% if error == "yes" %}
+            <div class="error-message">Invalid login credentials. Please try again.</div>
+            {% endif %}
+            <form method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username" required placeholder="Enter your username">
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required placeholder="Enter your password">
+                </div>
+                <button type="submit" class="btn">Login</button>
+            </form>
+            <p>Forgot your password? <a href="#">Reset here</a></p>
+        </div>
+    </div>
+</body>
+</html>

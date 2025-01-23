@@ -16,9 +16,23 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from .views import homepage
-
+from .views import *
+from django.conf.urls.static import static
+from django.conf import settings
 urlpatterns = [
     path('', homepage, name='homepage'),
     path('admin/', admin.site.urls),
+    path('login_as', login_as_view, name='login_as'),
+    path('signup_as', signup_as_view, name='signup_as'),
+    path('admin_login/', admin_login, name='admin_login'),
+    path('landlord_login/', landlord_login, name='landlord_login'),
+    path('renter_login/', Renter_login, name='renter_login'),
+    path('landlord_signup/', landlord_signup, name='landlord_signup'),
+    path('renter_signup/', renter_signup, name='renter_signup'),
+    path('about/', about_view, name='about'),
+    path('admin_dashboard', admin_dashboard, name='admin_home'),
+    path('logout/', Logout, name='logout'),
+
 ]
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

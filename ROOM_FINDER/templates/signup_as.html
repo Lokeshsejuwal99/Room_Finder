@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Select signup Type</title>
+    <!-- Include FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+    <h1 class="msg">SIGN-UP</h1>
+
+    <div class="signup-container">
+        <a href="{% url 'landlord_signup' %}" class="signup-box">
+            <div class="icon">
+                <i class="fas fa-home"></i>
+            </div>
+            <p>Landlord</p>
+            <a href="{% url 'renter_signup' %}" class="signup-box">
+                <div class="icon">
+                    <i class="fas fa-key"></i>
+                </div>
+                <p>Renter</p>
+            </a>
+    </div>
+</body>
+<style>
+    body {
+        font-family: 'Arial', sans-serif;
+        background-color: #eef2f3;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+    }
+
+    h1 {
+        font-size: 2.5rem;
+        color: #333;
+        margin-bottom: 40pxx;
+        text-align: center;
+    }
+
+    .signup-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 20px;
+        width: 90%;
+        max-width: 900px;
+    }
+
+    .signup-box {
+        color: orange;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-decoration: none;
+    }
+
+    .icon {
+        font-size: 200px;
+        margin-bottom: 10px;
+    }
+
+    .signup-box p {
+        font-size: 30px;
+        font-weight: bold;
+        text-align: center;
+    }
+</style>
+</html>

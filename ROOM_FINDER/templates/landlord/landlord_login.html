@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Landlord Login and Signup - Room Finder</title>
+</head>
+<body>
+    <!-- Navbar -->
+    <header>
+        {% include 'navbar.html' %}
+    </header>
+
+    <!-- Login and Signup Containers -->
+    <main>
+        <div class="auth-wrapper">
+            <!-- Login Container -->
+            <div class="auth-container login">
+                <h2>Landlord Login</h2>
+                {% if error == "yes" %}
+                <p class="error-message">Invalid login credentials. Please try again.</p>
+                {% endif %}
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="username">Username</label>
+                        <input type="text" id="username" name="username" placeholder="Enter your username" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" name="password" placeholder="Enter your password" required>
+                    </div>
+                    <button type="submit" class="btn">Login</button>
+                </form>
+                <p>Don’t have an account? <a href="#signup">Sign Up Here</a></p>
+            </div>
+
+            <!-- Signup Container -->
+            <div class="auth-container signup">
+                <h2>Landlord Signup</h2>
+                <form method="post" action="{% url 'landlord_signup' %}" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="full_name">Full Name</label>
+                        <input type="text" id="full_name" name="full_name" placeholder="Enter your full name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" placeholder="Enter your email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="username_signup">Username</label>
+                        <input type="text" id="username_signup" name="username" placeholder="Enter your username" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="password_signup">Password</label>
+                        <input type="password" id="password_signup" name="password" placeholder="Create a password" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="contact_number">Contact Number</label>
+                        <input type="text" id="contact_number" name="contact_number" placeholder="Enter your contact number" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="address">Address</label>
+                        <textarea id="address" name="address" placeholder="Enter your address" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="profile_picture">Profile Picture</label>
+                        <input type="file" id="profile_picture" name="profile_picture" accept="image/*">
+                    </div>
+                    <button type="submit" class="btn">Sign Up</button>
+                </form>
+                <p>Already have an account? <a href="#login">Login Here</a></p>
+            </div>
+        </div>
+    </main>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: radial-gradient(circle, #1e1e2f, #141423);
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            width: 100%;
+            background-color: #141423;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        main {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .auth-wrapper {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+            width: 100%;
+            max-width: 900px;
+        }
+
+        .auth-container {
+            width: 100%;
+            max-width: 400px;
+            background: #232334;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .auth-container h2 {
+            font-size: 24px;
+            font-weight: bold;
+            color: rgb(35, 240, 20);
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .form-group label {
+            font-size: 14px;
+            font-weight: bold;
+            color: white;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            color: #333;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            height: 80px; /* Set a default height for the textarea */
+        }
+
+        .btn {
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+            color: white;
+            background: rgb(35, 240, 20);
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            background: rgb(16, 173, 10);
+        }
+
+        .auth-container p {
+            font-size: 14px;
+            color: white;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .auth-container p a {
+            color: rgb(8, 226, 11);
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .auth-wrapper {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+            width: 100%;
+            max-width: 900px;
+            flex-direction: row-reverse; /* This switches their positions */
+        }
+
+        .auth-container p a:hover {
+            text-decoration: underline;
+        }
+
+        /* Error Message */
+        .error-message {
+            color: #e74c3c;
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+    </style>
+</body>
+</html>

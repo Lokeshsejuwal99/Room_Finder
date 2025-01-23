@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>Document</title>
+</head>
+<body>
+ <header>
+    {% load static %}
+  <nav class="navbar">
+   <div class="container">
+       <a href="{% url 'homepage' %}" class="logo">
+        <h1>Room Finder</h1>
+       </a>
+       {% if request.path == '/' %}
+       <ul class="nav-links">
+           <li><a href="{% url 'donation_gallery' %}">Our Gallery</a></li>
+           <li><a href="{% url 'about' %}">About Us</a></li>
+           <li><a href="{% url 'contact' %}">Contact</a></li>
+           <a class="nav-link" href="{% url 'feedback_page' %}">Feedback</a>
+       </ul>
+       <div class="auth-buttons">
+           <a href="{% url 'login_as' %}">Log in</a>
+           <a href="{% url 'signup_as' %}">Sign up</a>
+       </div>
+       {% else %}
+       <a href="{% url 'homepage' %}" class="go_back_to_homepage">Go to Homepage</a>
+       {% endif %}
+
+   </div>
+</nav>
+ </header>
+</body>
+<style>
+ /* Styles for navbar */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.navbar {
+    background-color: #003f7f;
+    color: white;
+    padding: 10px;
+    margin-bottom: 40px;
+    padding-left: 12px;
+    padding-right: 12px;
+    line-height: 1.3;
+}
+
+.logo-img{
+    height: 1.2cm;
+    width: 3cm;
+}
+
+.navbar .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.navbar .logo {
+    font-size: 24px;
+    font-weight: bold;
+    text-decoration: none;
+    color: white;
+}
+
+.navbar .nav-links {
+    list-style: none;
+    display: flex;
+    align-items: center;
+}
+
+.navbar .nav-links li {
+    margin-left: 20px;
+}
+
+.navbar .nav-links a {
+    text-decoration: none;
+    color: white;
+    font-size: 18px;
+    padding: 8px 15px;
+    transition: background-color 0.3s ease;
+}
+
+.navbar .nav-links a:hover {
+    background-color: #34495E;
+    border-radius: 5px;
+}
+
+/* Login/Signup Buttons */
+.navbar .auth-buttons {
+    margin-left: auto;
+    display: flex;
+}
+
+.navbar .auth-buttons a {
+    background-color: hsl(197, 93%, 35%);
+    color: white;
+    padding: 8px 15px;
+    border-radius: 5px;
+    text-decoration: none;
+    margin-left: 15px;
+    font-size: 18px;
+    transition: background-color 0.3s ease;
+}
+
+.navbar .auth-buttons a:hover {
+    background-color: hsl(197, 93%, 50%);
+}
+
+.go_back_to_homepage {
+    color: white;
+    text-decoration: none;
+}
+/* Responsive Navbar */
+@media (max-width: 768px) {
+    .navbar .container {
+        flex-direction: column;
+    }
+
+    .navbar .nav-links {
+        flex-direction: column;
+        align-items: center;
+        margin-top: 10px;
+    }
+
+    .navbar .nav-links li {
+        margin-left: 0;
+        margin-bottom: 10px;
+    }
+
+    .navbar .auth-buttons {
+        flex-direction: column;
+        margin-top: 10px;
+    }
+
+    .navbar .auth-buttons a {
+        margin-left: 0;
+        margin-bottom: 10px;
+    }
+}
+
+</style>
+</html>

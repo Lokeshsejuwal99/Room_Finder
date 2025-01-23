@@ -4,20 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Room Finder</title>
-    <link rel="stylesheet">
+    <!-- Include Fonts and Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     {% load static %}
 </head>
 <body>
-
- 
     <header>
+        <h1 class="logo">ROOM FINDER</h1>
         <div class="navbar">
-            <a href="/">Home</a>
-            <a href="/login">Login</a>
-            <a href="/signup">Sign Up</a>
+            <a href="/login_as">Login</a>
+            <a href="/signup_as">Sign Up</a>
         </div>
     </header>
-   
+
     <section class="search">
         <h1>Find Your Perfect Room</h1>
         <form action="/search" method="GET">
@@ -26,6 +25,7 @@
             <button type="submit">Search</button>
         </form>
     </section>
+
     <section class="rooms">
         <h2>Available Rooms</h2>
         <div class="room-cards">
@@ -46,217 +46,176 @@
         <p>&copy; 2025 Room Finder App</p>
     </footer>
 
-    <script src="{% static 'js/main.js' %}"></script>
+    <style>
+        /* General Styles */
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #ff9a00, #f97316);
+            color: #333;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        header {
+            background: radial-gradient(circle, #1e1e2f, #141423);
+            color: #fff;
+            padding: 2px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        header .logo {
+            font-size: 1.8rem;
+            font-weight: 600;
+        }
+
+        .navbar a {
+            font-size: 1rem;
+            color: #ff9a00;
+            margin-left: 20px;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+
+        .navbar a:hover {
+            color: #fff;
+        }
+
+        /* Search Section */
+        .search {
+            text-align: center;
+            padding: 60px 20px;
+            background: #fff;
+            margin: 30px auto;
+            border-radius: 10px;
+            max-width: 900px;
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .search h1 {
+            font-size: 2.2rem;
+            color: #222;
+            margin-bottom: 20px;
+        }
+
+        .search form {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .search input {
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            width: 200px;
+            font-size: 1rem;
+        }
+
+        .search button {
+            padding: 12px 20px;
+            background: #ff9a00;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .search button:hover {
+            background: #f97316;
+        }
+
+        /* Rooms Section */
+        .rooms {
+            padding: 50px 20px;
+            background: #fafafa;
+        }
+
+        .rooms h2 {
+            text-align: center;
+            font-size: 2rem;
+            color: #222;
+            margin-bottom: 30px;
+        }
+
+        .room-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            justify-items: center;
+        }
+
+        .room-card {
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            padding: 20px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .room-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .room-card img {
+            width: 100%;
+            height: 180px;
+            border-radius: 10px;
+            object-fit: cover;
+            margin-bottom: 15px;
+        }
+
+        .room-card h3 {
+            font-size: 1.4rem;
+            color: #222;
+            margin-bottom: 10px;
+        }
+
+        .room-card p {
+            font-size: 1rem;
+            color: #666;
+            margin-bottom: 15px;
+        }
+
+        .room-card a {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #4CAF50;
+            color: #fff;
+            border-radius: 5px;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: background 0.3s ease;
+        }
+
+        .room-card a:hover {
+            background: #45a049;
+        }
+
+        /* Footer */
+        footer {
+            background: #222;
+            color: #fff;
+            text-align: center;
+            padding: 15px;
+            margin-top: 40px;
+        }
+
+        footer p {
+            font-size: 1rem;
+        }
+    </style>
 </body>
-<style>
- /* Global Styles */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-body {
-    font-family: 'Arial', sans-serif;
-    background-color: #f4f4f9;
-    color: #333;
-}
-
-a {
-    text-decoration: none;
-    color: inherit;
-}
-
-/* Header Styles */
-header {
-    background-color: #333;
-    color: white;
-    padding: 20px;
-}
-
-.navbar {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-}
-
-.navbar a {
-    color: white;
-    font-size: 18px;
-    font-weight: bold;
-    text-transform: uppercase;
-}
-
-.navbar a:hover {
-    text-decoration: underline;
-}
-
-/* Search Section Styles */
-.search {
-    text-align: center;
-    padding: 50px 20px;
-    background-color: #fff;
-    margin-top: 30px;
-    border-radius: 10px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-.search h1 {
-    font-size: 2rem;
-    color: #333;
-    margin-bottom: 20px;
-}
-
-.search form {
-    display: flex;
-    justify-content: center;
-    gap: 15px;
-}
-
-.search input {
-    padding: 10px;
-    font-size: 16px;
-    width: 200px;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-}
-
-.search button {
-    padding: 10px 20px;
-    background-color: #4CAF50;
-    color: white;
-    font-size: 16px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-.search button:hover {
-    background-color: #45a049;
-}
-
-/* Rooms Section Styles */
-.rooms {
-    padding: 40px 20px;
-    background-color: #f9f9f9;
-}
-
-.rooms h2 {
-    font-size: 2rem;
-    color: #333;
-    margin-bottom: 20px;
-    text-align: center;
-}
-
-.room-cards {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-    justify-content: center;
-}
-
-.room-card {
-    background-color: #fff;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    width: 300px;
-    padding: 15px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s;
-    text-align: center;
-}
-
-.room-card:hover {
-    transform: scale(1.05);
-}
-
-.room-card img {
-    width: 100%;
-    height: 200px;
-    object-fit: cover;
-    border-radius: 5px;
-    margin-bottom: 10px;
-}
-
-.room-card h3 {
-    font-size: 1.5rem;
-    color: #333;
-    margin-bottom: 10px;
-}
-
-.room-card p {
-    font-size: 1rem;
-    color: #777;
-    margin-bottom: 10px;
-}
-
-.room-card a {
-    display: inline-block;
-    padding: 10px 20px;
-    background-color: #4CAF50;
-    color: white;
-    font-size: 16px;
-    border-radius: 5px;
-    margin-top: 10px;
-    text-transform: uppercase;
-    font-weight: bold;
-}
-
-.room-card a:hover {
-    background-color: #45a049;
-}
-
-/* Footer Styles */
-footer {
-    text-align: center;
-    padding: 20px;
-    background-color: #333;
-    color: white;
-    margin-top: 40px;
-}
-
-footer p {
-    font-size: 16px;
-}
-
-/* Responsive Styles */
-@media (max-width: 768px) {
-    .navbar {
-        flex-direction: column;
-        align-items: center;
-    }
-
-    .search form {
-        flex-direction: column;
-        gap: 10px;
-    }
-
-    .search input {
-        width: 100%;
-    }
-
-    .room-cards {
-        flex-direction: column;
-        align-items: center;
-    }
-
-    .room-card {
-        width: 90%;
-    }
-}
-
-@media (max-width: 480px) {
-    .search h1 {
-        font-size: 1.5rem;
-    }
-
-    .navbar a {
-        font-size: 16px;
-    }
-
-    .room-card {
-        width: 100%;
-    }
-}
-</style>
 </html>
