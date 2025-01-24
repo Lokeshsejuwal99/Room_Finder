@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Landlord Login and Signup - Room Finder</title>
+    <title>Landlord Login - Room Finder</title>
 </head>
 <body>
     <!-- Navbar -->
@@ -11,20 +11,23 @@
         {% include 'navbar.html' %}
     </header>
 
-    <!-- Login and Signup Containers -->
+    <!-- Login Container -->
     <main>
         <div class="auth-wrapper">
-            <!-- Login Container -->
             <div class="auth-container login">
                 <h2>Landlord Login</h2>
-                {% if error == "yes" %}
-                <p class="error-message">Invalid login credentials. Please try again.</p>
+                {% if messages %}
+                <ul class="error-messages">
+                    {% for message in messages %}
+                    <li>{{ message }}</li>
+                    {% endfor %}
+                </ul>
                 {% endif %}
-                <form method="post">
+                <form method="post" action="{% url 'landlord_login' %}">
                     {% csrf_token %}
                     <div class="form-group">
-                        <label for="username">Username</label>
-                        <input type="text" id="username" name="username" placeholder="Enter your username" required>
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" placeholder="Enter your email" value="{{ email }}" required>
                     </div>
                     <div class="form-group">
                         <label for="password">Password</label>
@@ -32,45 +35,6 @@
                     </div>
                     <button type="submit" class="btn">Login</button>
                 </form>
-                <p>Don’t have an account? <a href="#signup">Sign Up Here</a></p>
-            </div>
-
-            <!-- Signup Container -->
-            <div class="auth-container signup">
-                <h2>Landlord Signup</h2>
-                <form method="post" action="{% url 'landlord_signup' %}" enctype="multipart/form-data">
-                    {% csrf_token %}
-                    <div class="form-group">
-                        <label for="full_name">Full Name</label>
-                        <input type="text" id="full_name" name="full_name" placeholder="Enter your full name" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="email">Email</label>
-                        <input type="email" id="email" name="email" placeholder="Enter your email" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="username_signup">Username</label>
-                        <input type="text" id="username_signup" name="username" placeholder="Enter your username" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="password_signup">Password</label>
-                        <input type="password" id="password_signup" name="password" placeholder="Create a password" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="contact_number">Contact Number</label>
-                        <input type="text" id="contact_number" name="contact_number" placeholder="Enter your contact number" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="address">Address</label>
-                        <textarea id="address" name="address" placeholder="Enter your address" required></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label for="profile_picture">Profile Picture</label>
-                        <input type="file" id="profile_picture" name="profile_picture" accept="image/*">
-                    </div>
-                    <button type="submit" class="btn">Sign Up</button>
-                </form>
-                <p>Already have an account? <a href="#login">Login Here</a></p>
             </div>
         </div>
     </main>
@@ -110,19 +74,17 @@
 
         .auth-wrapper {
             display: flex;
-            justify-content: space-between;
-            gap: 20px;
+            justify-content: center;
             width: 100%;
-            max-width: 900px;
+            max-width: 400px;
         }
 
         .auth-container {
-            width: 100%;
-            max-width: 400px;
             background: #232334;
             border-radius: 10px;
             padding: 30px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 100%;
         }
 
         .auth-container h2 {
@@ -147,19 +109,13 @@
             margin-bottom: 5px;
         }
 
-        .form-group input,
-        .form-group textarea {
+        .form-group input {
             width: 100%;
             padding: 10px;
             border: 1px solid #ddd;
             border-radius: 5px;
             font-size: 16px;
             color: #333;
-        }
-
-        .form-group textarea {
-            resize: vertical;
-            height: 80px; /* Set a default height for the textarea */
         }
 
         .btn {
@@ -180,33 +136,6 @@
             background: rgb(16, 173, 10);
         }
 
-        .auth-container p {
-            font-size: 14px;
-            color: white;
-            margin-top: 20px;
-            text-align: center;
-        }
-
-        .auth-container p a {
-            color: rgb(8, 226, 11);
-            font-weight: bold;
-            text-decoration: none;
-        }
-
-        .auth-wrapper {
-            display: flex;
-            justify-content: space-between;
-            gap: 20px;
-            width: 100%;
-            max-width: 900px;
-            flex-direction: row-reverse; /* This switches their positions */
-        }
-
-        .auth-container p a:hover {
-            text-decoration: underline;
-        }
-
-        /* Error Message */
         .error-message {
             color: #e74c3c;
             font-size: 14px;

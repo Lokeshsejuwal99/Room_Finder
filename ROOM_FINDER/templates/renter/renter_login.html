@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Renter Login and Signup - Room Finder</title>
+    <title>Landlord Login - Room Finder</title>
 </head>
 <body>
     <!-- Navbar -->
@@ -11,20 +11,23 @@
         {% include 'navbar.html' %}
     </header>
 
-    <!-- Login and Signup Containers -->
+    <!-- Login Container -->
     <main>
         <div class="auth-wrapper">
-            <!-- Login Container -->
             <div class="auth-container login">
                 <h2>Renter Login</h2>
-                {% if error == "yes" %}
-                <p class="error-message">Invalid login credentials. Please try again.</p>
+                {% if messages %}
+                <ul class="error-messages">
+                    {% for message in messages %}
+                    <li>{{ message }}</li>
+                    {% endfor %}
+                </ul>
                 {% endif %}
-                <form method="post">
+                <form method="post" action="{% url 'renter_login' %}">
                     {% csrf_token %}
                     <div class="form-group">
-                        <label for="username">Username</label>
-                        <input type="text" id="username" name="username" placeholder="Enter your username" required>
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" placeholder="Enter your email" value="{{ email }}" required>
                     </div>
                     <div class="form-group">
                         <label for="password">Password</label>
@@ -32,33 +35,6 @@
                     </div>
                     <button type="submit" class="btn">Login</button>
                 </form>
-                <p>Don’t have an account? <a href="#signup">Sign Up Here</a></p>
-            </div>
-
-            <!-- Signup Container -->
-            <div class="auth-container signup">
-                <h2>Renter Signup</h2>
-                <form method="post" action="{% url 'landlord_signup' %}">
-                    {% csrf_token %}
-                    <div class="form-group">
-                        <label for="full_name">Full Name</label>
-                        <input type="text" id="full_name" name="full_name" placeholder="Enter your full name" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="email">Email</label>
-                        <input type="email" id="email" name="email" placeholder="Enter your email" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="username_signup">Username</label>
-                        <input type="text" id="username_signup" name="username" placeholder="Enter your username" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="password_signup">Password</label>
-                        <input type="password" id="password_signup" name="password" placeholder="Create a password" required>
-                    </div>
-                    <button type="submit" class="btn">Sign Up</button>
-                </form>
-                <p>Already have an account? <a href="#login">Login Here</a></p>
             </div>
         </div>
     </main>
@@ -98,25 +74,23 @@
 
         .auth-wrapper {
             display: flex;
-            justify-content: space-between;
-            gap: 20px;
+            justify-content: center;
             width: 100%;
-            max-width: 900px;
+            max-width: 400px;
         }
 
         .auth-container {
-            width: 100%;
-            max-width: 400px;
             background: #232334;
             border-radius: 10px;
             padding: 30px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 100%;
         }
 
         .auth-container h2 {
             font-size: 24px;
             font-weight: bold;
-            color: orange;
+            color: rgb(35, 240, 20);
             margin-bottom: 20px;
             text-transform: uppercase;
             text-align: center;
@@ -149,7 +123,7 @@
             padding: 12px;
             font-size: 16px;
             color: white;
-            background: orange;
+            background: rgb(35, 240, 20);
             border: none;
             border-radius: 5px;
             cursor: pointer;
@@ -159,36 +133,9 @@
         }
 
         .btn:hover {
-            background: orange;
+            background: rgb(16, 173, 10);
         }
 
-        .auth-container p {
-            font-size: 14px;
-            color: white;
-            margin-top: 20px;
-            text-align: center;
-        }
-
-        .auth-container p a {
-            color: orange;
-            font-weight: bold;
-            text-decoration: none;
-        }
-
-        .auth-wrapper {
-            display: flex;
-            justify-content: space-between;
-            gap: 20px;
-            width: 100%;
-            max-width: 900px;
-            flex-direction: row-reverse; /* This switches their positions */
-        }
-
-        .auth-container p a:hover {
-            text-decoration: underline;
-        }
-
-        /* Error Message */
         .error-message {
             color: #e74c3c;
             font-size: 14px;

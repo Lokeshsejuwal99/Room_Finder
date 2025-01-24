@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Landlord Dashboard - Room Finder</title>
+   </head>
+   <body>
+    <!-- Navbar -->
+    <header>
+     <h1>Room Finder</h1>
+        <nav>
+            <a href="#">Home</a>
+            <a href="#">Profile</a>
+            <a href="#">Log Out</a>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <div class="welcome-section">
+            <h1>Welcome, {{ request.user.username }}!</h1>
+            <p>Manage your properties, tenants, and rental agreements with ease.</p>
+           </div>
+
+           <div class="cards-container">
+            <div class="card">
+                <h2>My Properties</h2>
+                <p>View and manage the rooms you have listed for rent.</p>
+                <a href="#">Manage Properties</a>
+            </div>
+            <div class="card">
+                <h2>Tenant Applications</h2>
+                <p>Review applications from prospective renters.</p>
+                <a href="#">View Applications</a>
+            </div>
+            <div class="card">
+                <h2>Rental Agreements</h2>
+                <p>Create and track your rental agreements in one place.</p>
+                <a href="#">Manage Agreements</a>
+            </div>
+            <div class="card">
+                <h2>Payments</h2>
+                <p>Track and manage rental payments from tenants.</p>
+                <a href="#">View Payments</a>
+               </div>
+              </div>
+             </main>
+             <style>
+                 * {
+                     margin: 0;
+                     padding: 0;
+                     box-sizing: border-box;
+                 }
+            
+                 body {
+                     font-family: 'Arial', sans-serif;
+                     background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
+                     color: white;
+                     min-height: 100vh;
+                     display: flex;
+                     flex-direction: column;
+                 }
+            
+                 header {
+                     width: 100%;
+                     background: #141423;
+                     padding: 15px 20px;
+                     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                     display: flex;
+                     justify-content: space-between;
+                     align-items: center;
+                     position: sticky;
+                     top: 0;
+                     z-index: 10;
+                 }
+            
+                 header h1 {
+                     color: #23f014;
+                     font-size: 24px;
+                 }
+            
+                 header nav a {
+                     color: white;
+                     text-decoration: none;
+                     margin-left: 20px;
+                     font-size: 16px;
+                 }
+            
+                 main {
+                     flex: 1;
+                     display: flex;
+                     flex-direction: column;
+                     align-items: center;
+                     padding: 20px;
+                 }
+            
+                 .welcome-section {
+                     text-align: center;
+                     margin-bottom: 40px;
+                 }
+            
+                 .welcome-section h1 {
+                     font-size: 36px;
+                     font-weight: bold;
+                     margin-bottom: 10px;
+                 }
+            
+                 .welcome-section p {
+                     font-size: 18px;
+                     color: #c1c1c1;
+                 }
+            
+                 .cards-container {
+                     display: flex;
+                     flex-wrap: wrap;
+                     justify-content: center;
+                     gap: 20px;
+                     margin-top: 30px;
+                 }
+            
+                 .card {
+                     background: #232334;
+                     border-radius: 10px;
+                     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+                     width: 300px;
+                     padding: 20px;
+                     text-align: center;
+                     transition: transform 0.3s ease, box-shadow 0.3s ease;
+                 }
+            
+                 .card:hover {
+                     transform: translateY(-5px);
+                     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+                 }
+            
+                 .card h2 {
+                     font-size: 20px;
+                     margin-bottom: 10px;
+                     color: #23f014;
+                 }
+            
+                 .card p {
+                     font-size: 16px;
+                     color: #c1c1c1;
+                     margin-bottom: 20px;
+                 }
+            
+                 .card a {
+                     display: inline-block;
+                     background: #23f014;
+                     color: #141423;
+                     padding: 10px 15px;
+                     text-decoration: none;
+                     border-radius: 5px;
+                     font-weight: bold;
+                     transition: background 0.3s ease;
+                 }
+            
+                 .card a:hover {
+                     background: #16ad0a;
+                 }
+             </style>
+            </body>
+            </html>
+            
