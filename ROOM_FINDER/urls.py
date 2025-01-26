@@ -24,6 +24,8 @@ urlpatterns = [
     path('landlord/', include('Landlord.urls')),
     path('renter/', include('Renter.urls')),
     path('admin/', admin.site.urls),
+    path('contact/', contact_view, name='contact'),
+    path('about/', about_view, name='about'),
     path('login_as', login_as_view, name='login_as'),
     path('signup_as', signup_as_view, name='signup_as'),
     path('admin_login/', admin_login, name='admin_login'),

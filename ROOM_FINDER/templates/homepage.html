@@ -10,10 +10,15 @@
 </head>
 <body>
     <header>
+        <a href="{% url 'homepage' %}" class="logo">
         <h1 class="logo">ROOM FINDER</h1>
+        </a>
         <div class="navbar">
-            <a href="/login_as">Login</a>
-            <a href="/signup_as">Sign Up</a>
+            <a href="{% url "homepage" %}">Home</a>
+            <a href="{% url "about" %}">About</a>
+            <a href="{% url "contact" %}">Contact</a>
+            <a href="/login_as" style="color:white; margin-left:70px;">Login</a>
+            <a href="/signup_as" style="color:white">Sign Up</a>
         </div>
     </header>
 
@@ -29,7 +34,7 @@
     <section class="rooms">
         <h2>Available Rooms</h2>
         <div class="room-cards">
-            <!-- Dynamic Room Listings Here -->
+
             {% for room in rooms %}
             <div class="room-card">
                 <img src="{{ room.image_url }}" alt="{{ room.name }}">
@@ -43,7 +48,23 @@
     </section>
 
     <footer>
-        <p>&copy; 2025 Room Finder App</p>
+        <div class="container">
+            <div class="footer-links">
+                <a href="{% url 'about' %}">About Us</a>
+                <a href="{% url 'contact' %}">Contact Us</a>
+                <a>Privacy Policy</a>
+                <a>Terms & Conditions</a>
+            </div>
+            <div class="footer-social">
+                <a href="#"><img src="{% static 'images/facebook-icon.png' %}" alt="Facebook"></a>
+                <a href="#"><img src="{% static 'images/twitter-icon.png' %}" alt="Twitter"></a>
+                <a href="#"><img src="{% static 'images/linkedin-icon.png' %}" alt="LinkedIn"></a>
+                <a href="#"><img src="{% static 'images/newig4.png' %}" alt="Instagram"></a>
+            </div>
+            <div class="footer-copy">
+                <p>&copy; 2025 Room Finder. All rights reserved.</p>
+            </div>
+        </div>
     </footer>
 
     <style>
@@ -52,7 +73,7 @@
             font-family: 'Poppins', sans-serif;
             margin: 0;
             padding: 0;
-            background: linear-gradient(135deg, #ff9a00, #f97316);
+            background: radial-gradient(circle, #1e1e2f, #141423);
             color: #333;
         }
 
@@ -62,17 +83,18 @@
         }
 
         header {
-            background: radial-gradient(circle, #1e1e2f, #141423);
+            background: #222;
             color: #fff;
             padding: 2px 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
         }
 
         header .logo {
-            font-size: 1.8rem;
+            font-size: 1.5rem;
             font-weight: 600;
         }
 
@@ -209,12 +231,53 @@
             background: #222;
             color: #fff;
             text-align: center;
-            padding: 15px;
-            margin-top: 40px;
+            padding: 10px 0;
+            position: relative;
+            bottom: 0;x
+            width: 100%;
         }
 
         footer p {
-            font-size: 1rem;
+            margin: 0;
+        }
+        
+        footer .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .footer-links {
+            margin-bottom: 15px;
+        }
+        
+        .footer-links a {
+            color: #fff;
+            margin: 0 15px;
+            text-decoration: none;
+            font-size: 14px;
+        }
+        
+        .footer-links a:hover {
+            text-decoration: underline;
+        }
+        
+        .footer-social {
+            margin-bottom: 15px;
+        }
+        
+        .footer-social a {
+            margin: 0 10px;
+        }
+        
+        .footer-social img {
+            width: 24px;
+            height: 24px;
+        }
+        
+        .footer-copy p {
+            font-size: 14px;
+            margin: 0;
         }
     </style>
 </body>

@@ -1,0 +1,85 @@
+{% extends 'landlord/landlord_base.html' %}
+{% load static %}
+{% block title %}Landlord Profile{% endblock %}
+{% block content %}
+<div class="profile-container">
+    <h1>Landlord Profile</h1>
+    <div class="profile-card">
+        <h2>{{ landlord.username }}</h2>
+        <p>Email: {{ landlord.email }}</p>
+        <p>Phone: {{ landlord.phone }}</p>
+        <p>Address: {{ landlord.profile.address }}</p>
+        <p>Rooms Listed: {{ landlord.rooms.count }}</p>
+    </div>
+    <div class="profile-actions">
+        <a href="#" class="btn">Edit Profile</a>
+        <a href="#" class="btn">Change Password</a>
+    </div>
+</div>
+{% endblock %}
+
+<style>
+.profile-container {
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 20px;
+    background: #203a43;
+    color: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    text-align: center;
+}
+
+.profile-card {
+    background: #1b2838;
+    padding: 20px;
+    border-radius: 12px;
+    display: inline-block;
+    margin-top: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.profile-avatar {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    margin-bottom: 20px;
+    border: 4px solid #4db8ff;
+}
+
+h1 {
+    font-size: 28px;
+    margin-bottom: 10px;
+    color: #4db8ff;
+}
+
+h2 {
+    font-size: 22px;
+    color: #4db8ff;
+    margin-bottom: 10px;
+}
+
+p {
+    font-size: 16px;
+    color: #ddd;
+}
+
+.profile-actions {
+    margin-top: 20px;
+}
+
+.profile-actions .btn {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: bold;
+    margin: 0 10px;
+    transition: 0.3s;
+}
+
+.profile-actions .btn:hover {
+    background-color: #0056b3;
+}
+</style>

@@ -15,7 +15,6 @@
        </a>
        {% if request.path == '/' %}
        <ul class="nav-links">
-           <li><a href="{% url 'donation_gallery' %}">Our Gallery</a></li>
            <li><a href="{% url 'about' %}">About Us</a></li>
            <li><a href="{% url 'contact' %}">Contact</a></li>
            <a class="nav-link" href="{% url 'feedback_page' %}">Feedback</a>
@@ -25,7 +24,6 @@
            <a href="{% url 'signup_as' %}">Sign up</a>
        </div>
        {% else %}
-       <a href="{% url 'homepage' %}" class="go_back_to_homepage">Go to Homepage</a>
        {% endif %}
 
    </div>
@@ -41,7 +39,7 @@
 }
 
 .navbar {
-    background-color: #003f7f;
+    background: #222;
     color: white;
     padding: 10px;
     margin-bottom: 40px;
