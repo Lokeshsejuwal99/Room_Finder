@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from django.contrib.auth import login, logout, authenticate
 from django.contrib import messages
-from Landlord.models import Landlord
+from Landlord.models import Landlord, Room
 from Renter.models import Renter
 
 
@@ -88,8 +88,27 @@ def landlord_login(request):
 
     return render(request, 'landlord/landlord_login.html')
 
+
+def manage_landlords(request):
+    return render(request, "manage_landlords.html")
+
+
+def manage_renters(request):
+    return render(request, "manage_renters.html")
+
+def manage_rooms(request):
+    return render(request, "manage_rooms.html")
+
 def admin_dashboard(request):
-    return render(request, 'admin_home.html')
+    landlords_list = Landlord.objects.all()
+    renters_list = Renter.objects.all()
+    rooms = Room.objects.all()
+    context = {
+        'landlords_list' : landlords_list,
+        'renters_list' : renters_list,
+        'rooms' : rooms
+    }
+    return render(request, 'admin_home.html', context)
 
 
 def renter_signup(request):

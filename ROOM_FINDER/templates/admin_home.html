@@ -5,11 +5,11 @@
         <h2 style="color:white">Room Finder Admin</h2>
         <nav>
             <ul>
-                <li><a href="#">Dashboard</a></li>
-                <li><a href="#">Manage Rooms</a></li>
-                <li><a href="#">Manage Users</a></li>
+                <li><a href="{% url "manage_rooms" %}">Manage Rooms</a></li>
+                <li><a href="{% url "manage_landlords" %}">Manage Landlords</a></li>
+                <li><a href="{% url "manage_renters" %}">Manage Renters</a></li>
                 <li><a href="#">Bookings</a></li>
-                <li><a href="#">Reports</a></li>
+                <li><a href="#">Feedbacks</a></li>
                 <li><a href="{% url 'logout' %}">Logout</a></li>
             </ul>
         </nav>

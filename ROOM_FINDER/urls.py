@@ -34,6 +34,9 @@ urlpatterns = [
     path('landlord_signup/', landlord_signup, name='landlord_signup'),
     path('renter_signup/', renter_signup, name='renter_signup'),
     path('about/', about_view, name='about'),
+    path('manage_renters', manage_renters, name="manage_renters"),
+    path('manage_rooms', manage_rooms, name='manage_rooms'),
+    path('maanage_landlord', manage_landlords, name="manage_landlords"),
     path('admin_dashboard', admin_dashboard, name='admin_home'),
     path('logout/', Logout, name='logout'),
 
