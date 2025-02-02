@@ -15,8 +15,8 @@
 
         body {
             font-family: Arial, sans-serif;
-            background-color: #f9f9f9;
-            color: #333;
+            background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
+            color: white;
             height: 100vh;
             display: flex;
             flex-direction: column;
@@ -70,7 +70,6 @@
             max-width: 800px;
             width: 100%;
             padding: 20px;
-            background: white;
             border-radius: 12px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
@@ -87,7 +86,9 @@
 <body>
     <!-- Navbar -->
     <header>
-        <h1>Room Finder</h1>
+        <a href="{% url "landlord_home" %}">
+            <h1>Room Finder</h1>
+        </a>
         <nav>
             <a href="{% url 'landlord_profile' %}">Profile</a>
             <a href="{% url 'logout' %}">Log Out</a>

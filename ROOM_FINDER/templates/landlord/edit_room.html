@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Room</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: radial-gradient(circle, #1e1e2f, #141423);
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: auto;
+            background: #232334;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1, h2 {
+            color: white;
+        }
+
+        .edit-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .form-container {
+            width: 45%;
+            background: #232334;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            color: white;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        button {
+            background-color: #28a745;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background-color: #218838;
+        }
+
+        .image-section {
+            width: 50%;
+            text-align: center;
+        }
+
+        .image-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .image-card {
+            position: relative;
+            width: 150px;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .image-card img {
+            width: 100%;
+            border-radius: 8px;
+        }
+
+        .delete-btn {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background: red;
+            color: white;
+            border: none;
+            padding: 5px;
+            cursor: pointer;
+            font-size: 12px;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>{{ room.title }}</h1>
+
+        <div class="edit-section">
+
+            <!-- Room Edit Form -->
+            <div class="form-container">
+                <h2>Room Details</h2>
+                <form method="POST" action="{% url 'edit_room' room.id %}">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <button type="submit">Save Changes</button>
+                </form>
+
+                <hr>
+
+                <!-- Room Image Upload Form -->
+                <h2>Upload New Images</h2>
+                <form id="upload-form" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <input type="file" name="images" id="image-input" multiple>
+                    <button type="button" onclick="uploadImages()">Upload</button>
+                </form>
+            </div>
+
+            <!-- Display Existing Images -->
+            <div class="image-section">
+                <h2>Existing Images</h2>
+                <div class="image-container">
+                    {% for image in images %}
+                        <div class="image-card">
+                            <img src="{{ image.image.url }}" alt="Room Image">
+                            <form method="POST" action="{% url 'delete_room_image' image.id %}">
+                                {% csrf_token %}
+                                <button type="submit" class="delete-btn">X</button>
+                            </form>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function uploadImages() {
+            let formData = new FormData();
+            let files = document.getElementById('image-input').files;
+            for (let i = 0; i < files.length; i++) {
+                formData.append('images', files[i]);
+            }
+            formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+
+            fetch("{% url 'upload_room_image' room.id %}", {
+                method: "POST",
+                body: formData,
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    location.reload(); // Reload to show new images
+                } else {
+                    alert("Image upload failed!");
+                }
+            })
+            .catch(error => console.error("Error:", error));
+        }
+    </script>
+</body>
+</html>

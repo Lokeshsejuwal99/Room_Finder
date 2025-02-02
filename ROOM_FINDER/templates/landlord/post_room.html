@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Post a Room - Room Finder</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
+            color: white;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            width: 95%;
+            background: #232334;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .left {
+            flex: 1;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .left h2 {
+            font-size: 26px;
+            color: #23f014;
+            margin-bottom: 10px;
+        }
+
+        .right {
+            flex: 2;
+            display: flex;
+            flex-wrap: nowrap;
+            justify-content: space-between;
+            padding: 20px;
+        }
+
+        form {
+            width: 100%;
+            display: flex;
+            flex-wrap: nowrap;
+            justify-content: space-between;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            width: 30%; /* Make all fields occupy equal space */
+            padding: 5px;
+        }
+
+        label {
+            font-size: 14px;
+            margin-bottom: 5px;
+            color: #c1c1c1;
+        }
+
+        input, textarea, select {
+            width: 100%;
+            padding: 10px;
+            border-radius: 5px;
+            border: none;
+            background: #2c2c3c;
+            color: white;
+            font-size: 14px;
+        }
+
+        textarea {
+            height: 60px;
+        }
+
+        input::placeholder, textarea::placeholder {
+            color: #b0b0b0;
+        }
+
+        button {
+            width: 100%;
+            background: #23f014;
+            color: #141423;
+            padding: 10px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.3s;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background: #16ad0a;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 15px;
+            color: white;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 1200px) {
+            .container {
+                flex-direction: column;
+            }
+
+            .right {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            form {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .form-group {
+                width: 48%;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .form-group {
+                width: 100%;
+            }
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="left">
+            <h2>Post a Room</h2>
+            <p>Fill in the details to list your room.</p>
+        </div>
+        <div class="right">
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+
+                <div class="form-group">
+                    <label for="id_title">Room Title:</label>
+                    <input type="text" name="title" id="id_title" placeholder="Enter room title" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="id_price">Rs (per month):</label>
+                    <input type="number" name="price" id="id_price" placeholder="Enter price" required>
+                </div>
+
+                <div class="form-group">
+                 <label for="id_room_type">Room Type:</label>
+                 <select name="room_type" id="id_room_type" required>
+                     <option value="" disabled selected>Select room type</option>
+                     <option value="Single">Single</option>
+                     <option value="Double">Double</option>
+                     <option value="Flat">Flat</option>
+                 </select>
+               </div>
+
+                <div class="form-group">
+                    <label for="id_location">Location:</label>
+                    <input type="text" name="location" id="id_location" placeholder="Enter location" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="id_description">Description:</label>
+                    <textarea name="description" id="id_description" placeholder="Enter details" required></textarea>
+                </div>
+
+                <div class="form-group">
+                 <label for="id_images">Upload Images:</label>
+                 <input type="file" name="images" id="id_images" accept="image/*" multiple>
+             </div>
+
+                <div class="form-group">
+                    <button type="submit">Post Room</button>
+                </div>
+            </form>
+
+            <a href="{% url 'landlord_home' %}" class="back-link">← Back to Dashboard</a>
+        </div>
+    </div>
+</body>
+</html>

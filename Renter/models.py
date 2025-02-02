@@ -8,7 +8,7 @@ class Renter(models.Model):
     preferred_location = models.CharField(max_length=255, null=True, blank=True)
     profile_picture = models.ImageField(upload_to='renter_pictures/', null=True, blank=True)
 
-    def __str__(self):
+def __str__(self):
         return self.user.username
        
 class Booking(models.Model):

@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.models import User
 from django.contrib.auth import login, logout, authenticate
 from django.contrib import messages
@@ -95,9 +95,6 @@ def manage_landlords(request):
 
 def manage_renters(request):
     return render(request, "manage_renters.html")
-
-def manage_rooms(request):
-    return render(request, "manage_rooms.html")
 
 def admin_dashboard(request):
     landlords_list = Landlord.objects.all()
