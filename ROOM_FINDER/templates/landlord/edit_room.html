@@ -122,19 +122,9 @@
                     {{ form.as_p }}
                     <button type="submit">Save Changes</button>
                 </form>
-
-                <hr>
-
-                <!-- Room Image Upload Form -->
-                <h2>Upload New Images</h2>
-                <form id="upload-form" enctype="multipart/form-data">
-                    {% csrf_token %}
-                    <input type="file" name="images" id="image-input" multiple>
-                    <button type="button" onclick="uploadImages()">Upload</button>
-                </form>
             </div>
 
-            <!-- Display Existing Images -->
+            <!-- Image Upload and Existing Images -->
             <div class="image-section">
                 <h2>Existing Images</h2>
                 <div class="image-container">
@@ -148,7 +138,17 @@
                         </div>
                     {% endfor %}
                 </div>
+
+                <!-- Room Image Upload Form -->
+                <hr>
+                <h2>Upload New Images</h2>
+                <form id="upload-form" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <input type="file" name="images" id="image-input" multiple>
+                    <button type="button" onclick="uploadImages()">Upload</button>
+                </form>
             </div>
+
         </div>
     </div>
 

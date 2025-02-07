@@ -38,6 +38,7 @@ urlpatterns = [
     path('maanage_landlord', manage_landlords, name="manage_landlords"),
     path('admin_dashboard', admin_dashboard, name='admin_home'),
     path('logout/', Logout, name='logout'),
+    path('room/<int:room_id>/', room_detail, name='room_detail'),
 
 ]
 if settings.DEBUG:

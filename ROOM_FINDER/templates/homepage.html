@@ -11,7 +11,7 @@
 <body>
     <header>
         <a href="{% url 'homepage' %}" class="logo">
-        <h1 class="logo">ROOM FINDER</h1>[]
+        <h1 class="logo">ROOM FINDER</h1>
         </a>
         <div class="navbar">
             <a href="{% url "homepage" %}">Home</a>
@@ -34,10 +34,17 @@
     <section class="rooms">
         <h2>Available Rooms</h2>
         <div class="room-cards">
-
             {% for room in rooms %}
             <div class="room-card">
-                <img src="{{ room.image_url }}" alt="{{ room.name }}">
+                <!-- Show only the first image -->
+                {% with room.images.all|first as first_image %}
+                    {% if first_image %}
+                        <img src="{{ first_image.image.url }}" alt="{{ room.name }}">
+                    {% else %}
+                        <img src="{% static 'images/default-room.jpg' %}" alt="No Image Available">
+                    {% endif %}
+                {% endwith %}
+                
                 <h3>{{ room.name }}</h3>
                 <p>{{ room.description }}</p>
                 <p>Price: {{ room.price }} / month</p>
@@ -46,6 +53,7 @@
             {% endfor %}
         </div>
     </section>
+    
 
     <footer>
         <div class="container">
@@ -55,12 +63,7 @@
                 <a>Privacy Policy</a>
                 <a>Terms & Conditions</a>
             </div>
-            <div class="footer-social">
-                <a href="#"><img src="{% static 'images/facebook-icon.png' %}" alt="Facebook"></a>
-                <a href="#"><img src="{% static 'images/twitter-icon.png' %}" alt="Twitter"></a>
-                <a href="#"><img src="{% static 'images/linkedin-icon.png' %}" alt="LinkedIn"></a>
-                <a href="#"><img src="{% static 'images/newig4.png' %}" alt="Instagram"></a>
-            </div>
+
             <div class="footer-copy">
                 <p>&copy; 2025 Room Finder. All rights reserved.</p>
             </div>
@@ -137,7 +140,7 @@
             padding: 12px;
             border: 1px solid #ccc;
             border-radius: 5px;
-            width: 200px;
+            width: 170px;
             font-size: 1rem;
         }
 
@@ -169,12 +172,15 @@
             color: #222;
             margin-bottom: 30px;
         }
-
         .room-cards {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 20px;
+            width: 100%;
             justify-items: center;
+            grid-auto-flow: column;
+            overflow-x: auto;
+            padding-bottom: 20px;
         }
 
         .room-card {
@@ -193,11 +199,13 @@
 
         .room-card img {
             width: 100%;
-            height: 180px;
+            height: 130px;
             border-radius: 10px;
             object-fit: cover;
-            margin-bottom: 15px;
+            margin-bottom: 10px;
+            display: block;
         }
+        
 
         .room-card h3 {
             font-size: 1.4rem;
@@ -226,59 +234,46 @@
             background: #45a049;
         }
 
-        /* Footer */
-        footer {
-            background: #222;
-            color: #fff;
-            text-align: center;
-            padding: 10px 0;
-            position: relative;
-            bottom: 0;x
-            width: 100%;
-        }
-
-        footer p {
-            margin: 0;
-        }
+            footer {
+                background: #222;
+                color: #fff;
+                text-align: center;
+                padding: 40px 20px;
+                position: relative;
+                width: 100%;
+                bottom: 0;
+                box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.1);
+            }
         
-        footer .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
+            .container {
+                max-width: 1200px;
+                margin: 0 auto;
+                padding: 0 20px;
+            }
         
-        .footer-links {
-            margin-bottom: 15px;
-        }
+            .footer-links {
+                display: flex;
+                justify-content: center;
+                gap: 30px;
+                margin-bottom: 20px;
+            }
         
-        .footer-links a {
-            color: #fff;
-            margin: 0 15px;
-            text-decoration: none;
-            font-size: 14px;
-        }
+            .footer-links a {
+                color: #fff;
+                text-decoration: none;
+                font-size: 16px;
+                font-weight: 500;
+                transition: color 0.3s ease;
+            }
         
-        .footer-links a:hover {
-            text-decoration: underline;
-        }
+            .footer-links a:hover {
+                color: #ff9a00;
+            }
         
-        .footer-social {
-            margin-bottom: 15px;
-        }
-        
-        .footer-social a {
-            margin: 0 10px;
-        }
-        
-        .footer-social img {
-            width: 24px;
-            height: 24px;
-        }
-        
-        .footer-copy p {
-            font-size: 14px;
-            margin: 0;
-        }
+            .footer-copy p {
+                font-size: 14px;
+                margin-top: 20px;
+            }
     </style>
 </body>
 </html>

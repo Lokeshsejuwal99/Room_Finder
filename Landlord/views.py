@@ -28,16 +28,18 @@ def post_room(request):
         files = request.FILES.getlist('images')
 
         if room_form.is_valid():
-            room = room_form.save()
+            room = room_form.save(commit=False)
+            room.owner = request.user
+            room.save()
 
             for file in files:
                 RoomImage.objects.create(room=room, image=file)
 
-            return redirect('landlord_home')
+            return redirect('manage_rooms')
     else:
         room_form = RoomForm()
-    return render(request, 'landlord/post_room.html', {'room_form': room_form})
 
+    return render(request, 'landlord/post_room.html', {'room_form': room_form})
 
 
 def manage_rooms(request):
@@ -45,11 +47,17 @@ def manage_rooms(request):
     return render(request, 'manage_rooms.html', {'rooms': rooms})
 
 
-def delete_room_image(request, image_id):
-    image = get_object_or_404(RoomImage, id=image_id)
-    room_id = image.room.id
-    image.delete()
-    return redirect('edit_room', room_id=room_id)
+def delete_room(request, room_id):
+    if request.method == 'POST':
+        room = get_object_or_404(Room, id=room_id)
+        
+        room_images = RoomImage.objects.filter(room=room)
+        room_images.delete()
+        
+        room.delete()
+
+    return redirect('manage_rooms')
+
 
 
 

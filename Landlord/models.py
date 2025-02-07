@@ -24,8 +24,10 @@ class Room(models.Model):
     price = models.DecimalField(max_digits=10, decimal_places=2)
     location = models.CharField(max_length=255)
     description = models.TextField()
-    room_type = models.CharField(choices=ROOM_TYPE, max_length=10, null=True)
-    
+    room_type = models.CharField(choices=ROOM_TYPE, max_length=10, null=True, default="Single")
+    is_available = models.BooleanField(default=True)      
+    image = models.ManyToManyField('RoomImage', related_name='rooms')
+
     def __str__(self):
         return self.title
 

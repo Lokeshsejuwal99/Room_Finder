@@ -7,7 +7,11 @@ from Renter.models import Renter
 
 
 def homepage(request):
-    return render(request, 'homepage.html')
+    rooms = Room.objects.all()
+    context = {
+        "rooms": rooms,
+    }
+    return render(request, 'homepage.html', context)
 
 def login_as_view(request):
     return render(request, 'login_as.html')
@@ -77,7 +81,6 @@ def landlord_login(request):
         except User.DoesNotExist:
             user = None
         if user:
-            # Authenticate using the username and password
             user = authenticate(request, username=user.username, password=password)
         if user is not None:
             login(request, user)
@@ -131,7 +134,6 @@ def renter_signup(request):
             messages.error(request, "Email already registered!")
             return redirect('renter_signup')
 
-        # Create User and Renter Profile
         user = User.objects.create_user(username=username, email=email, password=password)
         Renter.objects.create(user=user, contact_number=contact_number)
 
@@ -146,14 +148,12 @@ def renter_login(request):
         email = request.POST.get('email')
         password = request.POST.get('password')
 
-        # Find the user by email
         try:
             user = User.objects.get(email=email)
         except User.DoesNotExist:
             user = None
 
         if user:
-            # Authenticate using the username and password
             user = authenticate(request, username=user.username, password=password)
 
         if user is not None:
@@ -165,7 +165,12 @@ def renter_login(request):
 
     return render(request, 'renter/renter_login.html')
 
+def room_detail(request, room_id):
+    room = get_object_or_404(Room, id=room_id)
+    return render(request, "room_details.html", {"room": room})
+
 
 def Logout(request):
     logout(request)
     return redirect('homepage')
+

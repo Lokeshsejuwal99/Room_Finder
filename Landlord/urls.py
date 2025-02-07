@@ -8,7 +8,7 @@ urlpatterns = [
     path('landlord_profile/', landlord_profile, name='landlord_profile'),
     path('post-room/', post_room, name='post_room'),
     path('manage-rooms/', manage_rooms, name='manage_rooms'),
-    path('delete-room-image/<int:image_id>/', delete_room_image, name='delete_room_image'),
+    path('delete-room/<int:room_id>/', delete_room, name='delete_room'),
     path('edit-room/<int:room_id>/', edit_room, name='edit_room'),
     path('upload-room-image/<int:room_id>/', upload_room_image, name='upload_room_image'),
 
