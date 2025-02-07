@@ -6,98 +6,13 @@
     <title>{{ room.name }} - Room Details</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     {% load static %}
-    <style>
-        body {
-            font-family: 'Poppins', sans-serif;
-            margin: 0;
-            padding: 0;
-            background: radial-gradient(circle, #1e1e2f, #141423);
-            color: #333;
-        }
-
-        .container {
-            max-width: 900px;
-            margin: 50px auto;
-            background: #fff;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
-        }
-
-        .room-header {
-            text-align: center;
-        }
-
-        .room-header h1 {
-            font-size: 2rem;
-            color: #222;
-            margin-bottom: 10px;
-        }
-
-        .room-profile {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        .room-profile img {
-            width: 100%;
-            max-height: 300px;
-            object-fit: cover;
-            border-radius: 10px;
-        }
-
-        .room-details {
-            font-size: 1rem;
-            color: #555;
-            line-height: 1.6;
-            margin-bottom: 20px;
-        }
-
-        .room-images {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            justify-content: center;
-        }
-
-        .room-images img {
-            width: 100px;
-            height: 80px;
-            object-fit: cover;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: transform 0.2s ease;
-        }
-
-        .room-images img:hover {
-            transform: scale(1.1);
-        }
-
-        .contact-info {
-            text-align: center;
-            margin-top: 20px;
-        }
-
-        .contact-info a {
-            display: inline-block;
-            padding: 10px 20px;
-            background: #4CAF50;
-            color: #fff;
-            border-radius: 5px;
-            font-size: 1rem;
-            font-weight: 600;
-            transition: background 0.3s ease;
-            text-decoration: none;
-        }
-
-        .contact-info a:hover {
-            background: #45a049;
-        }
-
-    </style>
 </head>
 <body>
-
+    <header>
+        <a href="{% url "landlord_home" %}" style="text-decoration:none;">
+            <h1>Room Finder</h1>
+        </a>
+    </header>
     <div class="container">
         <div class="room-header">
             <h1>{{ room.name }}</h1>
@@ -107,7 +22,7 @@
         <!-- Profile Image -->
         <div class="room-profile">
             {% if room.images.all %}
-                <img src="{{ room.images.first.image.url }}" alt="Profile Image">
+                <img id="mainImage" src="{{ room.images.first.image.url }}" alt="Profile Image">
             {% endif %}
         </div>
 
@@ -121,7 +36,7 @@
         <h3 style="text-align:center;">Other Images</h3>
         <div class="room-images">
             {% for image in room.images.all|slice:"1:" %}
-                <img src="{{ image.image.url }}" alt="Room Image">
+                <img src="{{ image.image.url }}" alt="Room Image" onclick="changeImage('{{ image.image.url }}')">
             {% endfor %}
         </div>
 
@@ -131,5 +46,131 @@
         </div>
     </div>
 
+    <script>
+        function changeImage(imageUrl) {
+            document.getElementById('mainImage').src = imageUrl;
+        }
+    </script>
+
 </body>
+<style>
+    body {
+        font-family: 'Poppins', sans-serif;
+        margin: 0;
+        padding: 0;
+        background: radial-gradient(circle, #1e1e2f, #141423);
+        color: #333;
+    }
+
+    header {
+        width: 100%;
+        background: #141423;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding:1px 10px;
+        position: sticky;
+        top: 0;
+        z-index: 10;
+    }
+
+    header h1 {
+        color: #23f014;
+        font-size: 24px;
+    }
+
+    header nav a {
+        color: white;
+        text-decoration: none;
+        margin-left: 20px;
+        font-size: 16px;
+        padding: 5px 10px;
+        border-radius: 5px;
+        transition: background-color 0.3s ease;
+    }
+
+    header nav a:hover {
+        background-color: #4db8ff;
+    }
+    .container {
+        max-width: 900px;
+        margin: 50px auto;
+        background: #fff;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .room-header {
+        text-align: center;
+    }
+
+    .room-header h1 {
+        font-size: 2rem;
+        color: #222;
+        margin-bottom: 10px;
+    }
+
+    .room-profile {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .room-profile img {
+        width: 100%;
+        max-height: 300px;
+        object-fit: cover;
+        border-radius: 10px;
+    }
+
+    .room-details {
+        font-size: 1rem;
+        color: #555;
+        line-height: 1.6;
+        margin-bottom: 20px;
+    }
+
+    .room-images {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        justify-content: center;
+    }
+
+    .room-images img {
+        width: 100px;
+        height: 80px;
+        object-fit: cover;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: transform 0.2s ease;
+    }
+
+    .room-images img:hover {
+        transform: scale(1.1);
+    }
+
+    .contact-info {
+        text-align: center;
+        margin-top: 20px;
+    }
+
+    .contact-info a {
+        display: inline-block;
+        padding: 10px 20px;
+        background: #4CAF50;
+        color: #fff;
+        border-radius: 5px;
+        font-size: 1rem;
+        font-weight: 600;
+        transition: background 0.3s ease;
+        text-decoration: none;
+    }
+
+    .contact-info a:hover {
+        background: #45a049;
+    }
+</style>
+
 </html>
