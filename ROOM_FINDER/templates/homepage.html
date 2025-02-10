@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Room Finder</title>
-    <!-- Include Fonts and Icons -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     {% load static %}
 </head>
@@ -36,7 +35,6 @@
         <div class="room-cards">
             {% for room in rooms %}
             <div class="room-card">
-                <!-- Show only the first image -->
                 {% with room.images.all|first as first_image %}
                     {% if first_image %}
                         <img src="{{ first_image.image.url }}" alt="{{ room.name }}">
@@ -46,15 +44,22 @@
                 {% endwith %}
                 
                 <h3>{{ room.name }}</h3>
-                <p>{{ room.description }}</p>
-                <p>Price: {{ room.price }} / month</p>
+            <p>{{ room.description }}</p>
+                <p>Rs: {{ room.price }} / month</p>
                 <a href="/room/{{ room.id }}">View Details</a>
             </div>
             {% endfor %}
         </div>
-    </section>
     
+        <!-- View More Button, only if there are more rooms -->
+        {% if rooms.has_next %}
+            <div class="view-more-container">
+                <a href="?page={{ rooms.next_page_number }}" class="view-more-btn">View More</a>
+            </div>
+        {% endif %}
+    </section>
 
+    
     <footer>
         <div class="container">
             <div class="footer-links">
@@ -77,7 +82,7 @@
             margin: 0;
             padding: 0;
             background: radial-gradient(circle, #1e1e2f, #141423);
-            color: #333;
+            color: #333;rent
         }
 
         a {
@@ -112,7 +117,7 @@
         .navbar a:hover {
             color: #fff;
         }
-
+ 
         /* Search Section */
         .search {
             text-align: center;
@@ -274,6 +279,55 @@
                 font-size: 14px;
                 margin-top: 20px;
             }
+
+            .view-more-container {
+                text-align: center;
+                margin-top: 30px;
+            }
+            
+            .view-more-btn {
+                padding: 12px 20px;
+                background: #ff9a00;
+                color: #fff;
+                font-weight: 600;
+                border-radius: 5px;
+                font-size: 1rem;
+                cursor: pointer;
+                text-decoration: none;
+                transition: background 0.3s ease;
+            }
+            
+            .view-more-btn:hover {
+                background: #f97316;
+            }
+            
     </style>
+    
 </body>
+<script>
+    const viewMoreBtn = document.getElementById('view-more-btn');
+    if (viewMoreBtn) {
+        viewMoreBtn.addEventListener('click', function() {
+            const nextPage = "{{ next_page }}";
+            
+            // Only fetch the next page if it exists
+            if (nextPage) {
+                fetch('/homepage/?page=' + nextPage)
+                    .then(response => response.text())
+                    .then(data => {
+                        const roomsSection = document.querySelector('.room-cards');
+                        const newRooms = data.match(/<div class="room-card">.*?<\/div>/g);
+    
+                        newRooms.forEach(room => {
+                            roomsSection.innerHTML += room;
+                        });
+                    })
+                    .catch(err => console.error('Error loading more rooms:', err));
+            } else {
+                console.log('No more rooms to load.');
+            }
+        });
+    }
+</script>
+
 </html>

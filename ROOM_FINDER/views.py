@@ -4,14 +4,30 @@ from django.contrib.auth import login, logout, authenticate
 from django.contrib import messages
 from Landlord.models import Landlord, Room
 from Renter.models import Renter
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+
 
 
 def homepage(request):
-    rooms = Room.objects.all()
-    context = {
-        "rooms": rooms,
-    }
-    return render(request, 'homepage.html', context)
+    room_list = Room.objects.all()
+    paginator = Paginator(room_list, 4)  # Show 8 rooms per page
+
+    page = request.GET.get('page', 1)  # Get current page number from URL, default is 1
+    try:
+        rooms = paginator.page(page)
+    except PageNotAnInteger:
+        rooms = paginator.page(1)  # If page is not an integer, show first page
+    except EmptyPage:
+        rooms = paginator.page(paginator.num_pages)  # If page is out of range, show last page
+
+    # If on the last page and fewer than 8 rooms remain, ensure it is shown
+    if rooms.number == paginator.num_pages and rooms.has_previous():
+        next_page = None  # No next page
+    else:
+        next_page = rooms.next_page_number() if rooms.has_next() else None
+
+    return render(request, 'homepage.html', {'rooms': rooms, 'next_page': next_page})
+
 
 def login_as_view(request):
     return render(request, 'login_as.html')
@@ -40,7 +56,6 @@ def admin_login(request):
         error = "no"
     
     return render(request, "admin_login.html", {"error": error})
-
 
 
 
@@ -94,7 +109,6 @@ def landlord_login(request):
 
 def manage_landlords(request):
     return render(request, "manage_landlords.html")
-
 
 def manage_renters(request):
     return render(request, "manage_renters.html")

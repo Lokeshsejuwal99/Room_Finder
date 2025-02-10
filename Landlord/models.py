@@ -31,6 +31,7 @@ class Room(models.Model):
     def __str__(self):
         return self.title
 
+
 class RoomImage(models.Model):
     room = models.ForeignKey(Room, on_delete=models.CASCADE, related_name='images')
     image = models.ImageField(upload_to='room_images/')
