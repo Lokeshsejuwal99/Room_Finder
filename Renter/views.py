@@ -31,7 +31,7 @@ def renter_dashboard(request):
 @login_required
 def book_room(request, room_id):
     room = get_object_or_404(Room, id=room_id)
-    renter_profile = request.user.renter_profile
+    renter_profile = Renter.profile_picture
 
     if request.method == 'POST':
         form = BookingForm(request.POST)
@@ -44,7 +44,7 @@ def book_room(request, room_id):
     else:
         form = BookingForm()
 
-    return render(request, 'book_room.html', {'room': room, 'form': form})
+    return render(request, 'renter/book_now.html', {'room': room, 'form': form})
    
 @login_required
 def booking_confirmation(request, booking_id):
@@ -59,7 +59,18 @@ def available_rooms(request):
     rooms = Room.objects.filter(is_available=True)
     return render(request, 'renter/renter_home.html', {'rooms': rooms})
    
-   
+def renter_profile(request):
+    renter = request.user
+    context = {
+        'renter': renter,
+    }
+    return render(request, "renter/rent_profile.html", context)
+
+
+def view_bookings(request):
+    bookings = Booking.objects.all()
+    return render(request, "renter/view_bookings.html", bookings)
+
 
 @login_required
 def cancel_booking(request, booking_id):

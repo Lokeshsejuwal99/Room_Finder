@@ -30,14 +30,14 @@
                 <div class="card dashboard-card bg-primary text-white">
                     <h5>Your Profile</h5>
                     <p>Manage your account details.</p>
-                    <a href="#" class="btn btn-light btn-custom">View Profile</a>
+                    <a href="{% url 'renter_profile' %}" class="btn btn-light btn-custom">View Profile</a>
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="card dashboard-card bg-warning text-dark">
                     <h5>Your Bookings</h5>
                     <p>View and manage your room bookings.</p>
-                    <a href="#" class="btn btn-dark btn-custom">View Bookings</a>
+                    <a href="{% url "view_bookings" %}" class="btn btn-dark btn-custom">View Bookings</a>
                 </div>
             </div>
     </div>
@@ -64,7 +64,7 @@
                         <td>${{ room.price }}</td>
                         <td>{{ room.location }}</td>
                         <td>
-                            <a href="{% url 'book_room' room.id %}" class="btn btn-success btn-sm">Book Now</a>
+                            <a href="{% url 'room_detail' room.id %}" class="btn btn-success btn-sm">View Details</a>
                         </td>
                     </tr>
                 {% empty %}
