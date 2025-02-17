@@ -9,5 +9,7 @@ urlpatterns = [
     path('renter_profile/', renter_profile, name='renter_profile'),
     path('cancel/<int:booking_id>/', cancel_booking, name='cancel_booking'),
     path('view_bookings/', view_bookings, name="view_bookings"),
+    path('booking-confirmation/<int:booking_id>/', booking_confirmation, name='booking_confirmation'),
+
 
 ]

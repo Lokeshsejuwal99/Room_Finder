@@ -9,18 +9,18 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 
 def homepage(request):
-    room_list = Room.objects.all()
-    paginator = Paginator(room_list, 4)  # Show 8 rooms per page
+    room_list = Room.objects.filter(is_available=True)
 
-    page = request.GET.get('page', 1)  # Get current page number from URL, default is 1
+    paginator = Paginator(room_list, 4)
+
+    page = request.GET.get('page', 1)
     try:
         rooms = paginator.page(page)
     except PageNotAnInteger:
-        rooms = paginator.page(1)  # If page is not an integer, show first page
+        rooms = paginator.page(1)
     except EmptyPage:
-        rooms = paginator.page(paginator.num_pages)  # If page is out of range, show last page
+        rooms = paginator.page(paginator.num_pages)
 
-    # If on the last page and fewer than 8 rooms remain, ensure it is shown
     if rooms.number == paginator.num_pages and rooms.has_previous():
         next_page = None  # No next page
     else:

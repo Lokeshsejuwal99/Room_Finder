@@ -6,7 +6,6 @@
     <title>Renter Profile</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha384-r74AG4ERLO1QgkEs+EJStH6kAqxj87Yg/TZCOjLOZXvRwhpBEE+IvbZhX5j3QIqR" crossorigin="anonymous">
     <style>
-        /* Reset default margin and padding */
         * {
             margin: 0;
             padding: 0;
@@ -58,7 +57,6 @@
             background-color: #4db8ff;
         }
 
-        /* Profile page styling */
         .content {
             flex: 1;
             display: flex;
@@ -68,8 +66,8 @@
         }
 
         .profile-container {
-            max-width: 900px; /* Make the container a bit wider */
-            margin: 0 auto; /* Center the profile content */
+            max-width: 900px;
+            margin: 0 auto;
             padding: 30px;
             background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
             color: white;
@@ -87,6 +85,14 @@
             margin-top: 20px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
             width: 100%;
+        }
+
+        .profile-picture {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            margin-bottom: 20px;
+            object-fit: cover;
         }
 
         h1 {
@@ -135,7 +141,6 @@
             margin-top: auto;
         }
 
-        /* Make it responsive for smaller screens */
         @media (max-width: 768px) {
             .profile-container {
                 padding: 20px;
@@ -167,20 +172,23 @@
 
     <!-- Page Content -->
     <div class="content">
-        <div>
-            <div class="profile-container">
-                <h1>Renter Profile</h1>
-                <div class="profile-card">
-                    <h2>{{ renter.contact_number }}</h2>
-                    <p>Email: {{ renter.email }}</p>
-                    <p>Phone: {{ renter.contact_number }}</p>
-                    <p>Address: {{ renter.preferred_location }}</p>
-                    <p>Rooms Listed: {{ renter.rooms.count }}</p>
-                </div>
-                <div class="profile-actions">
-                    <a href="#" class="btn">Edit Profile</a>
-                    <a href="#" class="btn">Change Password</a>
-                </div>
+        <div class="profile-container">
+            <h1>Renter Profile</h1>
+            <div class="profile-card">
+                <!-- Display profile picture if available -->
+                {% if renter.profile_picture %}
+                    <img src="{{ renter.profile_picture.url }}" alt="Profile Picture" class="profile-picture">
+                {% else %}
+                    <i class="fas fa-user-circle" style="font-size: 100px; color: #ddd;"></i>
+                {% endif %}
+                <h2>{{ renter.user.username }}</h2>
+                <p>Email: {{ renter.user.email }}</p>
+                <p>Phone: {{ renter.contact_number }}</p>
+                <p>Preferred Location: {{ renter.preferred_location }}</p>
+            </div>
+            <div class="profile-actions">
+                <a href="#" class="btn">Edit Profile</a>
+                <a href="#" class="btn">Change Password</a>
             </div>
         </div>
     </div>

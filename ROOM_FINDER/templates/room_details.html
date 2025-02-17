@@ -42,7 +42,7 @@
 
         <!-- Contact Info -->
         <div class="contact-info">
-            <a href="tel:{{ room.owner_contact }}">Book Now</a>
+            <a href="{% url 'book_room' room.id %}" class="btn btn-primary">Book Now</a>
         </div>
     </div>
 

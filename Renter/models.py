@@ -12,12 +12,14 @@ class Renter(models.Model):
        
        
        
+
+
 class Booking(models.Model):
     room = models.ForeignKey(Room, on_delete=models.CASCADE, related_name='bookings')
     renter = models.ForeignKey(Renter, on_delete=models.CASCADE, related_name='bookings')
-    booking_date = models.DateTimeField(auto_now_add=True)
-    check_in_date = models.DateField()
-    check_out_date = models.DateField()
+    booking_date = models.DateTimeField(auto_now_add=True, null=True)
+    move_in_date = models.DateField()
+    rental_duration = models.CharField(help_text="Duration in months", max_length=40)
     payment_status = models.BooleanField(default=False)
 
     def save(self, *args, **kwargs):
@@ -36,8 +38,9 @@ class Booking(models.Model):
 
 
     def __str__(self):
-        return f"Booking by {self.renter.user.username} for {self.room.name}"
-
+        return f"Booking by {self.renter.user.username} for {self.room.title}"
+    
+    
 
 class Review(models.Model):
     room = models.ForeignKey(Room, on_delete=models.CASCADE, related_name='reviews')
