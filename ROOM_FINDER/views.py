@@ -7,7 +7,6 @@ from Renter.models import Renter
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 
-
 def homepage(request):
     room_list = Room.objects.filter(is_available=True)
 
@@ -58,55 +57,129 @@ def admin_login(request):
     return render(request, "admin_login.html", {"error": error})
 
 
+# def landlord_signup(request):
+#     if request.method == 'POST':
+#         username = request.POST['username']
+#         email = request.POST['email']
+#         first_name = request.POST['first_name']
+#         last_name = request.POST['last_name']
+#         password = request.POST['password']
+#         confirm_password = request.POST['confirm_password']
+#         contact_number = request.POST['contact_number']
+
+#         if password != confirm_password:
+#             messages.error(request, "Passwords do not match!")
+#             return redirect('landlord_signup')
+
+#         if User.objects.filter(username=username).exists():
+#             messages.error(request, "Username already exists!")
+#             return redirect('landlord_signup')
+
+#         if User.objects.filter(email=email).exists():
+#             messages.error(request, "Email already registered!")
+#             return redirect('landlord_signup')
+
+#         user = User.objects.create_user(username=username, email=email, first_name=first_name, last_name=last_name, password=password)
+#         Landlord.objects.create(user=user, contact_number=contact_number, is_landlord=True)
+
+#         messages.success(request, "Signup successful! You can now log in.")
+#         return redirect('landlord_login')
+
+#     return render(request, 'landlord/landlord_signup.html')
 
 def landlord_signup(request):
     if request.method == 'POST':
         username = request.POST['username']
         email = request.POST['email']
+        first_name = request.POST['first_name']
+        last_name = request.POST['last_name']
         password = request.POST['password']
         confirm_password = request.POST['confirm_password']
-        
+        contact_number = request.POST['contact_number']
+
         if password != confirm_password:
             messages.error(request, "Passwords do not match!")
+            print("Passwords do not match!")  # Debugging statement
             return redirect('landlord_signup')
-        
+
         if User.objects.filter(username=username).exists():
             messages.error(request, "Username already exists!")
+            print("Username already exists!")  # Debugging statement
             return redirect('landlord_signup')
-        
+
         if User.objects.filter(email=email).exists():
             messages.error(request, "Email already registered!")
+            print("Email already registered!")  # Debugging statement
             return redirect('landlord_signup')
-        
-        user = User.objects.create_user(username=username, email=email, password=password)
-        user.save()
-        messages.success(request, "Signup successful! Please log in.")
+
+        # Create user
+        user = User.objects.create_user(username=username, email=email, first_name=first_name, last_name=last_name, password=password)
+        print(f"User created: {user}")  # Debugging statement
+
+        # Ensure the Landlord object is created and associated with the user
+        landlord = Landlord.objects.create(user=user, contact_number=contact_number, is_landlord=True)
+        print(f"Landlord created: {landlord}")  # Debugging statement
+
+        messages.success(request, "Signup successful! You can now log in.")
         return redirect('landlord_login')
 
     return render(request, 'landlord/landlord_signup.html')
+
+
+
+# def landlord_login(request):
+#     if request.method == 'POST':
+#         email = request.POST.get('email')
+#         password = request.POST.get('password')
+
+#         try:
+#             user = User.objects.get(email=email)
+#         except User.DoesNotExist:
+#             user = None
+
+#         if user and hasattr(user, 'landlord'):
+#             user = authenticate(request, username=user.username, password=password)
+#             if user is not None:
+#                 login(request, user)
+#                 return redirect('landlord_home')
+
+#         messages.error(request, "Invalid credentials or not a landlord!")
+#         return redirect('landlord_login')
+
+#     return render(request, 'landlord/landlord_login.html')
 
 def landlord_login(request):
     if request.method == 'POST':
         email = request.POST.get('email')
         password = request.POST.get('password')
-        
-        # Find the user by email
+
         try:
             user = User.objects.get(email=email)
+            print(f"User found: {user}")  # Debugging statement
         except User.DoesNotExist:
+            print("User does not exist!")  # Debugging statement
             user = None
+
         if user:
-            user = authenticate(request, username=user.username, password=password)
-        if user is not None:
-            login(request, user)
-            return redirect('landlord_home')
-        else:
-            messages.error(request, "Invalid credentials! Please try again.")
-            return redirect('landlord_login')
+            print(f"User exists and has landlord: {hasattr(user, 'landlord')}")  # Debugging statement
+            if hasattr(user, 'landlord'):
+                user = authenticate(request, username=user.username, password=password)
+                if user is not None:
+                    print("Authentication successful!")  # Debugging statement
+                    login(request, user)
+                    return redirect('landlord_home')
+                else:
+                    print("Authentication failed!")  # Debugging statement
+            else:
+                print("User is not a landlord!")  # Debugging statement
+
+        messages.error(request, "Invalid credentials or not a landlord!")
+        print("Invalid credentials or not a landlord!")  # Debugging statement
+        return redirect('landlord_login')
 
     return render(request, 'landlord/landlord_login.html')
 
-
+ 
 def manage_landlords(request):
     return render(request, "manage_landlords.html")
 
@@ -127,19 +200,16 @@ def admin_dashboard(request):
 
 def renter_signup(request):
     if request.method == 'POST':
-        # Collect form data
-        username = request.POST.get('username')
-        email = request.POST.get('email')
-        password = request.POST.get('password')
-        confirm_password = request.POST.get('confirm_password')
-        contact_number = request.POST.get('contact_number')
+        username = request.POST['username']
+        email = request.POST['email']
+        password = request.POST['password']
+        confirm_password = request.POST['confirm_password']
+        contact_number = request.POST['contact_number']
 
-        # Validate passwords
         if password != confirm_password:
             messages.error(request, "Passwords do not match!")
             return redirect('renter_signup')
 
-        # Check if email or username already exists
         if User.objects.filter(username=username).exists():
             messages.error(request, "Username already taken!")
             return redirect('renter_signup')
@@ -149,7 +219,7 @@ def renter_signup(request):
             return redirect('renter_signup')
 
         user = User.objects.create_user(username=username, email=email, password=password)
-        Renter.objects.create(user=user, contact_number=contact_number)
+        Renter.objects.create(user=user, contact_number=contact_number, is_renter=True)
 
         messages.success(request, "Signup successful! You can now log in.")
         return redirect('renter_login')
@@ -167,17 +237,17 @@ def renter_login(request):
         except User.DoesNotExist:
             user = None
 
-        if user:
+        if user and hasattr(user, 'renter'):
             user = authenticate(request, username=user.username, password=password)
+            if user is not None:
+                login(request, user)
+                return redirect('renter_home')
 
-        if user is not None:
-            login(request, user)
-            return redirect('renter_home')
-        else:
-            messages.error(request, "Invalid credentials! Please try again.")
-            return redirect('renter_login')
+        messages.error(request, "Invalid credentials or not a renter!")
+        return redirect('renter_login')
 
     return render(request, 'renter/renter_login.html')
+
 
 def room_detail(request, room_id):
     room = get_object_or_404(Room, id=room_id)

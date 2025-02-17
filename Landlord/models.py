@@ -2,14 +2,14 @@ from django.db import models
 from django.contrib.auth.models import User
 
 class Landlord(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='landlord_profile')
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     contact_number = models.CharField(max_length=15)
     address = models.TextField()
     profile_picture = models.ImageField(upload_to='landlord_pictures/', null=True, blank=True)
-
+    is_landlord = models.BooleanField(default=True, null=True)
+    
     def __str__(self):
         return self.user.username
-
 
 
 class Room(models.Model):

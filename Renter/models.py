@@ -7,10 +7,10 @@ class Renter(models.Model):
     contact_number = models.CharField(max_length=15)
     preferred_location = models.CharField(max_length=255, null=True, blank=True)
     profile_picture = models.ImageField(upload_to='renter_pictures/', null=True, blank=True)
+    is_renter = models.BooleanField(default=True, null=True)
+    
     def __str__(self):
         return self.user.username
-       
-       
        
 
 

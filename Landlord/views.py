@@ -1,14 +1,15 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Room, Landlord, RoomImage
+from .models import Room, RoomImage
 from django.contrib.auth.decorators import login_required
-from .forms import RoomForm, RoomImageForm
-from django.contrib import messages
+from .forms import RoomForm
 from django.http import JsonResponse
+from .decorators import landlord_required
 
 
 # Create your views here.
 
 @login_required
+@landlord_required
 def landlord_home(request):
  return render(request, 'landlord/landlord_home.html')
  

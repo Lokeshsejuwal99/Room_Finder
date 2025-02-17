@@ -3,10 +3,13 @@ from .models import Renter, Booking, Room
 from django.contrib.auth.decorators import login_required
 from .forms import BookingForm
 from datetime import datetime
+from .decorators import renter_required
+
 
 # Create your views here.
 
 @login_required
+@renter_required
 def renter_home(request):
  available_rooms = Room.objects.filter(is_available=True)
  my_bookings = Booking.objects.filter(renter=request.user.renter)
@@ -84,7 +87,7 @@ def view_bookings(request):
 @login_required
 def cancel_booking(request, booking_id):
     """
-    Handles booking cancellation.
+    Handles booking cancellation
     """
     booking = get_object_or_404(Booking, id=booking_id, renter=request.user.renter)
     booking.delete()
