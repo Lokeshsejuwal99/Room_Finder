@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer - Reviews</title>
+</head>
+<body>
+    <header>
+        {% include 'navbar.html' %}
+    </header>
+    <main>
+
+        <section class="admin-feedbacks-container">
+            <h1>Customer - Reviews</h1>
+            <table class="feedbacks-table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Message</th>
+                        <th>Date</th>
+                        <th>Details</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for feedback in feedbacks %}
+                        <tr>
+                            <td>{{ feedback.name }}</td>
+                            <td>{{ feedback.email }}</td>
+                            <td>{{ feedback.comment|slice:":50" }}...</td>
+                            <td>{{ feedback.created_on }}</td>
+                            <td><a href="{% url 'feedback_detail' feedback.id %}">View Details</a></td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </section>
+    </main>
+</body>
+
+<style>
+
+    body {
+    background: radial-gradient(circle, #1e1e2f, #141423);
+    font-family: Arial, sans-serif;
+}
+
+.admin-feedbacks-container {
+    max-width: 1000px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.admin-feedbacks-container h1 {
+    font-size: 26px;
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.feedbacks-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.feedbacks-table th, .feedbacks-table td {
+    padding: 10px;
+    text-align: left;
+    border: 1px solid #ddd;
+}
+
+.feedbacks-table th {
+    background-color: #007bff;
+    color: white;
+}
+
+.feedbacks-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.feedbacks-table tr:hover {
+    background-color: #f1f1f1;
+}
+
+.feedbacks-table a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.feedbacks-table a:hover {
+    text-decoration: underline;
+}
+</style>
+</html>

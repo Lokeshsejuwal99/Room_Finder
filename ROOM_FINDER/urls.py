@@ -25,7 +25,7 @@ urlpatterns = [
     path('landlord/', include('Landlord.urls')),
     path('renter/', include('Renter.urls')),
     path('admin/', admin.site.urls),
-    path('contact/', contact_view, name='contact'),
+    path('feedbacks/', feedback_view, name='feedbacks'),
     path('about/', about_view, name='about'),
     path('login_as', login_as_view, name='login_as'),
     path('signup_as', signup_as_view, name='signup_as'),
@@ -34,12 +34,13 @@ urlpatterns = [
     path('renter_login/', renter_login, name='renter_login'),
     path('landlord_signup/', landlord_signup, name='landlord_signup'),
     path('renter_signup/', renter_signup, name='renter_signup'),
-    path('about/', about_view, name='about'),
     path('manage_renters', manage_renters, name="manage_renters"),
     path('maanage_landlord', manage_landlords, name="manage_landlords"),
     path('admin_dashboard', admin_dashboard, name='admin_home'),
-    path('logout/', Logout, name='logout'),
     path('room/<int:room_id>/', room_detail, name='room_detail'),
+    path('admin_feedbacks/', admin_feedbacks, name='admin_feedbacks'),
+    path('admin_feedbacks/<int:feedback_id>/', feedback_detail, name='feedback_detail'),
+    path('logout/', Logout, name='logout'),
 
 ]
 if settings.DEBUG:

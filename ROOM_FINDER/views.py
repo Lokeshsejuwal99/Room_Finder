@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import login, logout, authenticate
 from django.contrib import messages
 from Landlord.models import Landlord, Room
-from Renter.models import Renter
+from Renter.models import Renter, Review
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 
@@ -37,8 +37,30 @@ def signup_as_view(request):
 def about_view(request):
  return render(request, 'about.html')
 
-def contact_view(request):
-    return render(request, 'contact.html')
+def feedback_view(request):
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        email = request.POST.get('email')
+        message = request.POST.get('message')
+        
+        review = Review(name=name, email=email, comment=message)
+        review.save()
+
+        return redirect('feedbacks')
+
+    feedbacks = Review.objects.all().order_by('-created_on')
+    return render(request, 'feedback.html', {'feedbacks': feedbacks})
+
+
+
+def admin_feedbacks(request):
+    feedbacks = Review.objects.all().order_by('-created_on')    
+    return render(request, 'admin_feedbacks.html', {'feedbacks': feedbacks})
+
+
+def feedback_detail(request, feedback_id):
+    feedback = get_object_or_404(Review, pk=feedback_id)
+    return render(request, 'feedback_detail.html', {'feedback': feedback})
 
 def admin_login(request):
     error = None
@@ -56,36 +78,6 @@ def admin_login(request):
     
     return render(request, "admin_login.html", {"error": error})
 
-
-# def landlord_signup(request):
-#     if request.method == 'POST':
-#         username = request.POST['username']
-#         email = request.POST['email']
-#         first_name = request.POST['first_name']
-#         last_name = request.POST['last_name']
-#         password = request.POST['password']
-#         confirm_password = request.POST['confirm_password']
-#         contact_number = request.POST['contact_number']
-
-#         if password != confirm_password:
-#             messages.error(request, "Passwords do not match!")
-#             return redirect('landlord_signup')
-
-#         if User.objects.filter(username=username).exists():
-#             messages.error(request, "Username already exists!")
-#             return redirect('landlord_signup')
-
-#         if User.objects.filter(email=email).exists():
-#             messages.error(request, "Email already registered!")
-#             return redirect('landlord_signup')
-
-#         user = User.objects.create_user(username=username, email=email, first_name=first_name, last_name=last_name, password=password)
-#         Landlord.objects.create(user=user, contact_number=contact_number, is_landlord=True)
-
-#         messages.success(request, "Signup successful! You can now log in.")
-#         return redirect('landlord_login')
-
-#     return render(request, 'landlord/landlord_signup.html')
 
 def landlord_signup(request):
     if request.method == 'POST':
@@ -126,27 +118,6 @@ def landlord_signup(request):
     return render(request, 'landlord/landlord_signup.html')
 
 
-
-# def landlord_login(request):
-#     if request.method == 'POST':
-#         email = request.POST.get('email')
-#         password = request.POST.get('password')
-
-#         try:
-#             user = User.objects.get(email=email)
-#         except User.DoesNotExist:
-#             user = None
-
-#         if user and hasattr(user, 'landlord'):
-#             user = authenticate(request, username=user.username, password=password)
-#             if user is not None:
-#                 login(request, user)
-#                 return redirect('landlord_home')
-
-#         messages.error(request, "Invalid credentials or not a landlord!")
-#         return redirect('landlord_login')
-
-#     return render(request, 'landlord/landlord_login.html')
 
 def landlord_login(request):
     if request.method == 'POST':
@@ -252,6 +223,7 @@ def renter_login(request):
 def room_detail(request, room_id):
     room = get_object_or_404(Room, id=room_id)
     return render(request, "room_details.html", {"room": room})
+
 
 
 def Logout(request):

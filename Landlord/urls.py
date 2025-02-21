@@ -10,6 +10,7 @@ urlpatterns = [
     path('manage-rooms/', manage_rooms, name='manage_rooms'),
     path('delete-room/<int:room_id>/', delete_room, name='delete_room'),
     path('edit-room/<int:room_id>/', edit_room, name='edit_room'),
+    path('landlord/applications/', view_applications, name='view_applications'),
     path('upload-room-image/<int:room_id>/', upload_room_image, name='upload_room_image'),
 
 ]

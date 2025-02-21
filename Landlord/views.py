@@ -3,6 +3,7 @@ from .models import Room, RoomImage
 from django.contrib.auth.decorators import login_required
 from .forms import RoomForm
 from django.http import JsonResponse
+from Renter.models import Booking
 from .decorators import landlord_required
 
 
@@ -84,3 +85,14 @@ def upload_room_image(request, room_id):
 
         return JsonResponse({"success": True})
     return JsonResponse({"success": False}, status=400)
+
+
+@login_required
+def view_applications(request):
+    # Get the landlord's user object and filter the rooms they own
+    rooms_owned = Room.objects.filter(owner=request.user)  # Get rooms owned by the logged-in landlord
+
+    # Fetch the bookings for these rooms
+    bookings = Booking.objects.filter(room__in=rooms_owned)
+
+    return render(request, 'landlord/view_applications.html', {'bookings': bookings})

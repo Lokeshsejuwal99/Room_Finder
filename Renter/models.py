@@ -43,11 +43,10 @@ class Booking(models.Model):
     
 
 class Review(models.Model):
-    room = models.ForeignKey(Room, on_delete=models.CASCADE, related_name='reviews')
-    renter = models.ForeignKey(Renter, on_delete=models.CASCADE, related_name='reviews')
-    rating = models.IntegerField()
+    name = models.CharField(max_length=50, null=True)
+    email = models.EmailField(null=True)
     comment = models.TextField()
     created_on = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"Review by {self.renter.username} for {self.room.title}"
+        return f"Review by {self.name}"

@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Landlord Applications</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f7fa;
+        }
+
+        h1 {
+            background-color: #2d87f0;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            margin: 0;
+        }
+
+        table {
+            width: 80%;
+            margin: 20px auto;
+            border-collapse: collapse;
+            background-color: white;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: center;
+            border: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        td {
+            font-size: 14px;
+        }
+
+        .status-paid {
+            color: green;
+            font-weight: bold;
+        }
+
+        .status-pending {
+            color: red;
+            font-weight: bold;
+        }
+
+        .no-applications {
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+            color: #888;
+            padding: 20px;
+        }
+
+        .action-btn {
+            padding: 5px 10px;
+            background-color: #2d87f0;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .action-btn:hover {
+            background-color: #1f65c2;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Renter Applications</h1>
+
+    <div class="container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Renter</th>
+                    <th>Room</th>
+                    <th>Move-in Date</th>
+                    <th>Rental Duration</th>
+                    <th>Payment Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for booking in bookings %}
+                    <tr>
+                        <td>{{ booking.renter.user.username }}</td>
+                        <td>{{ booking.room.title }}</td>
+                        <td>{{ booking.move_in_date }}</td>
+                        <td>{{ booking.rental_duration }} months</td>
+                        <td>
+                            {% if booking.payment_status %}
+                                <span class="status-paid">Paid</span>
+                            {% else %}
+                                <span class="status-pending">Pending</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <a href="{% url 'update_payment_status' booking.id %}" class="action-btn">
+                                {% if booking.payment_status %}
+                                    Mark as Unpaid
+                                {% else %}
+                                    Mark as Paid
+                                {% endif %}
+                            </a>
+                        </td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="6" class="no-applications">No applications found.</td>
+                    </tr>x`
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+</body>
+</html>
