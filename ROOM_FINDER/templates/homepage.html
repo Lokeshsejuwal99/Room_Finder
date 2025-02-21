@@ -51,7 +51,6 @@
             {% endfor %}
         </div>
     
-        <!-- View More Button, only if there are more rooms -->
         {% if rooms.has_next %}
             <div class="view-more-container">
                 <a href="?page={{ rooms.next_page_number }}" class="view-more-btn">View More</a>
@@ -178,7 +177,7 @@
         }
         .room-cards {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 20px;
             width: 100%;
             justify-items: center;
@@ -192,7 +191,7 @@
             border-radius: 10px;
             box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
             text-align: center;
-            padding: 20px;
+            padding: 30px;
             transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
