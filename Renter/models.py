@@ -21,7 +21,9 @@ class Booking(models.Model):
     move_in_date = models.DateField()
     rental_duration = models.CharField(help_text="Duration in months", max_length=40)
     payment_status = models.BooleanField(default=False)
-
+    approved = models.BooleanField(default=False, null=True)
+    
+    
     def save(self, *args, **kwargs):
         """Override save method to mark room as unavailable upon booking."""
         if self.pk is None:
@@ -43,10 +45,14 @@ class Booking(models.Model):
     
 
 class Review(models.Model):
+    renter = models.ForeignKey(Renter, on_delete=models.CASCADE, null=True)
+    room = models.ForeignKey(Room, on_delete=models.CASCADE, related_name="reviews", null=True)
     name = models.CharField(max_length=50, null=True)
     email = models.EmailField(null=True)
     comment = models.TextField()
     created_on = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"Review by {self.name}"
+            if self.room:
+                return f"Review for {self.room.title} by {self.name}"
+            return f"General Feedback by {self.name}"

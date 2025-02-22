@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Room, RoomImage
+from .models import Room, RoomImage, Landlord
 from django.contrib.auth.decorators import login_required
 from .forms import RoomForm
 from django.http import JsonResponse
@@ -45,7 +45,8 @@ def post_room(request):
 
 
 def manage_rooms(request):
-    rooms = Room.objects.filter(owner=request.user)
+    landlord = get_object_or_404(Landlord, user=request.user)
+    rooms = Room.objects.filter(owner=landlord)
     return render(request, 'manage_rooms.html', {'rooms': rooms})
 
 
@@ -87,12 +88,37 @@ def upload_room_image(request, room_id):
     return JsonResponse({"success": False}, status=400)
 
 
+
 @login_required
 def view_applications(request):
-    # Get the landlord's user object and filter the rooms they own
-    rooms_owned = Room.objects.filter(owner=request.user)  # Get rooms owned by the logged-in landlord
+    try:
+        # Get the landlord instance associated with the current user
+        landlord = Landlord.objects.get(user=request.user)
 
-    # Fetch the bookings for these rooms
-    bookings = Booking.objects.filter(room__in=rooms_owned)
+        # Get all rooms owned by this landlord
+        rooms = Room.objects.filter(owner=landlord)
 
-    return render(request, 'landlord/view_applications.html', {'bookings': bookings})
+        # Get all bookings for these rooms
+        bookings = Booking.objects.filter(room__in=rooms)
+
+        return render(request, 'landlord/view_applications.html', {'bookings': bookings})
+
+    except Landlord.DoesNotExist:
+        return render(request, 'landlord/error.html', {'message': "Landlord not found."})
+
+
+def approve_booking(request, booking_id):
+    # Assuming you're passing booking_id to approve a specific booking
+    booking = get_object_or_404(Booking, id=booking_id)
+
+    # Update the 'approved' field to True when the landlord approves the booking
+    booking.approved = True
+    booking.save()
+
+    # Optionally, you might want to update room availability here as well
+    room = booking.room
+    room.is_available = False  # Mark the room as unavailable if it's now booked
+    room.save()
+
+    # Redirect to a relevant page (e.g., landlord's application page or room details)
+    return redirect('view_applications')  

@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My Bookings</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+    <style>
+      /* General reset */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        font-family: "Arial", sans-serif;
+        background-color: #f9f9f9;
+        color: #333;
+      }
+      header {
+        background: #222;
+        color: #fff;
+        padding: 15px;
+        text-align: left;
+        position: fixed;
+        width: 100%;
+        top: 0;
+        left: 0;
+        z-index: 1000;
+      }
+
+      header .logo {
+        font-size: 24px;
+        font-weight: bold;
+        color: white;
+        text-transform: uppercase;
+      }
+
+      .container {
+        width: 80%;
+        margin: 30px auto;
+        margin-top: 100px;
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+      }
+      th, td {
+        padding: 12px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+      }
+      .btn {
+        background-color: #007bff;
+        color: #fff;
+        padding: 8px 15px;
+        text-decoration: none;
+        border-radius: 5px;
+      }
+      .btn-cancel {
+        background-color: #dc3545;
+      }
+      td {
+        vertical-align: middle;
+      }
+      
+      .review-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 5px;
+      }
+      
+      textarea {
+        width: 100%;
+        padding: 10px;
+        margin-top: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        max-width: 250px;
+        min-height: 50px;
+        resize: none;
+      }
+      .submit-review {
+        margin-top: 10px;
+        width: 100%;
+        text-align: center;
+      }
+      .submit-review button {
+        padding: 8px 15px;
+        background-color: #28a745;
+        color: #fff;
+        width: auto;
+        border: none;
+        border-radius: 5px;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+        <div class="logo">Room Finder</div>
+    </header>
+    
+    <div class="container">
+      <h2>My Rooms</h2>
+      {% if bookings %}
+      <table>
+        <thead>
+          <tr>
+            <th>S.N.</th>
+            <th>Room</th>
+            <th>Move-In Date</th>
+            <th>Rental Duration</th>
+            <th>Booking Date</th>
+            <th>Actions</th>
+            <th>Review</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for booking in bookings %}
+          <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>{{ booking.room.title }}</td>
+            <td>{{ booking.move_in_date }}</td>
+            <td>{{ booking.rental_duration }}</td>
+            <td>{{ booking.booking_date|date:"F d, Y" }}</td>
+            <td>
+              <a href="{% url 'cancel_booking' booking.id %}" class="btn btn-cancel" onclick="return confirm('Are you sure you want to cancel this booking?');">
+                Leave
+              </a>
+            </td>
+            <td>
+                <div class="review-container">
+                  {% with booking.room.reviews.first as review %}
+                    {% if review %}
+                      <p>{{ review.comment }}</p>
+                    {% else %}
+                      <form id="reviewForm" method="POST" action="{% url 'submit_review' booking.room.id %}">
+                        {% csrf_token %}
+                        <input type="hidden" name="booking_id" value="{{ booking.id }}">
+                        <textarea name="review_content" placeholder="Write your review here..." required></textarea>
+                        <div class="submit-review">
+                          <button type="submit">Submit Review</button>
+                        </div>
+                      </form>
+                    {% endif %}
+                  {% endwith %}
+                </div>
+              </td>
+              
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      {% else %}
+      <p class="no-bookings">No Room found.</p>
+      {% endif %}
+    </div>
+
+    <script>
+      function submitReview(event, bookingId) {
+        event.preventDefault();  // Prevent the default form submission
+
+        const form = document.getElementById(`reviewForm-${bookingId}`);
+        const formData = new FormData(form);
+
+        fetch(form.action, {
+          method: 'POST',
+          body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            // If the review was successfully submitted, reload the page
+            location.reload();
+          } else {
+            alert('There was an error submitting your review.');
+          }
+        })
+        .catch(error => {
+          console.error('Error:', error);
+          alert('There was an error submitting your review.');
+        });
+      }
+    </script>
+  </body>
+</html>

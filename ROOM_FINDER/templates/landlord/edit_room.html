@@ -131,7 +131,7 @@
                     {% for image in images %}
                         <div class="image-card">
                             <img src="{{ image.image.url }}" alt="Room Image">
-                            <form method="POST" action="{% url 'delete_room_image' image.id %}">
+                            <form method="POST" action="{% url 'delete_room' image.id %}">
                                 {% csrf_token %}
                                 <button type="submit" class="delete-btn">X</button>
                             </form>

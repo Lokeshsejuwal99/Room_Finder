@@ -1,5 +1,7 @@
+from django.http import JsonResponse
+from django.contrib import messages
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Renter, Booking, Room
+from .models import Renter, Booking, Room, Review
 from django.contrib.auth.decorators import login_required
 from .forms import BookingForm
 from datetime import datetime
@@ -76,7 +78,7 @@ def renter_profile(request):
 
 
 def view_bookings(request):
-    bookings = Booking.objects.all()
+    bookings = Booking.objects.filter(approved=False)   
     context = {
         'bookings' : bookings,
     }
@@ -86,9 +88,65 @@ def view_bookings(request):
 
 @login_required
 def cancel_booking(request, booking_id):
-    """
-    Handles booking cancellation
-    """
-    booking = get_object_or_404(Booking, id=booking_id, renter=request.user.renter)
+    booking = get_object_or_404(Booking, id=booking_id)
+
+    # Mark the room as available again
+    booking.room.is_available = True
+    booking.room.save()
+
+    # Delete booking, but NOT the reviews
     booking.delete()
-    return redirect('renter_home')
+    
+    messages.success(request, "Your booking has been canceled. The room is now available again.")
+    return redirect("view_rooms")
+
+@login_required
+def view_rooms(request):
+    bookings = Booking.objects.filter(renter=request.user.renter).select_related("room")
+
+    if request.method == "POST":
+        booking_id = request.POST.get("booking_id")
+        review_content = request.POST.get("review_content")
+
+        booking = get_object_or_404(Booking, id=booking_id, renter=request.user.renter)
+
+        review, created = Review.objects.get_or_create(
+            room=booking.room,
+            renter=request.user.renter,
+            defaults={
+                "comment": review_content,
+                "name": request.user.renter.user.username,
+                "email": request.user.email,
+            },
+        )
+        for booking in bookings:
+         print(f"Booking ID: {booking.id}, Room ID: {booking.room.id if booking.room else 'No Room'}")
+         
+        for booking in Booking.objects.all():
+            print(f"Booking ID: {booking.id}, Room: {booking.room}")
+
+        if not created:
+            review.comment = review_content
+            review.save()
+
+        return JsonResponse({"success": True})
+
+    return render(request, "renter/view_rooms.html", {"bookings": bookings})
+
+
+def submit_review(request, room_id):
+    """Handles renter review submission"""
+    room = get_object_or_404(Room, id=room_id)
+
+    if request.method == "POST":
+        review_text = request.POST.get("review_content")
+
+        if review_text:
+            Review.objects.create(
+                renter=request.user.renter,
+                room=room,
+                comment=review_text
+            )
+        return redirect(request.META.get('HTTP_REFERER', 'view_room'))
+
+    return JsonResponse({"success": False})

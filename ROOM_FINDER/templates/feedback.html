@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Customer Reviews</title>
+    <title>Customer Feedback</title>
     <style>
         body {
             background: radial-gradient(circle, #1e1e2f, #141423);
@@ -47,7 +47,7 @@
 
         .contact-container button {
             padding: 10px 20px;
-            background-color: hsl(197, 93%, 28%);
+            background-color: hsl(133, 79.50%, 47.80%);
             color: white;
             border: none;
             border-radius: 4px;
@@ -108,7 +108,7 @@
 
     <main>
         <section class="contact-container">
-            <h1>Write your Review</h1>
+            <h1>Write your Feedback</h1>
             <form action="{% url 'feedbacks' %}" method="post">
                 {% csrf_token %}
                 <div class="form-group">
@@ -120,15 +120,15 @@
                     <input type="email" id="email" name="email" required>
                 </div>
                 <div class="form-group">
-                    <label for="message">Review</label>
+                    <label for="message">Feedback</label>
                     <textarea id="message" name="message" rows="5" required></textarea>
                 </div>
-                <button type="submit">Send Review</button>
+                <button type="submit">Send Feedback</button>
             </form>
         </section>
 
         <section class="reviews-section">
-            <h3>Latest Reviews</h3>
+            <h3>Latest Feedback</h3>
             <ul class="list-group">
                 {% for review in feedbacks %}
                     <li class="list-group-item">

@@ -12,5 +12,6 @@ urlpatterns = [
     path('edit-room/<int:room_id>/', edit_room, name='edit_room'),
     path('landlord/applications/', view_applications, name='view_applications'),
     path('upload-room-image/<int:room_id>/', upload_room_image, name='upload_room_image'),
+    path('approve_booking/<int:booking_id>/', approve_booking, name='approve_booking'),
 
 ]
