@@ -15,8 +15,7 @@
     </header>
     <div class="container">
         <div class="room-header">
-            <h1>{{ room.name }}</h1>
-            <p>{{ room.description }}</p>
+            <h1>{{ room.title }}</h1>
         </div>
 
         <!-- Profile Image -->
@@ -30,6 +29,8 @@
             <p><strong>Price:</strong> {{ room.price }} / month</p>
             <p><strong>Location:</strong> {{ room.location }}</p>
             <p><strong>Owner:</strong> {{ room.owner }}</p>
+            <p><strong>Room Details:</strong> {{ room.description }}</p>
+
         </div>
 
         <!-- Additional Images -->
@@ -132,8 +133,7 @@
 
     .room-profile img {
         width: 100%;
-        max-height: 300px;
-        object-fit: cover;
+        max-height: 500px;
         border-radius: 10px;
     }
 

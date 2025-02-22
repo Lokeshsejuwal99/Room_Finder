@@ -130,7 +130,7 @@
             <td>{{ booking.rental_duration }}</td>
             <td>{{ booking.booking_date|date:"F d, Y" }}</td>
             <td>
-              <a href="{% url 'cancel_booking' booking.id %}" class="btn btn-cancel" onclick="return confirm('Are you sure you want to cancel this booking?');">
+              <a href="{% url 'cancel_booking' booking.id %}" class="btn btn-cancel" onclick="return confirm('Are you sure you want to leave this booking?');">
                 Leave
               </a>
             </td>

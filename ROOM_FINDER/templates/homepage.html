@@ -43,8 +43,7 @@
                     {% endif %}
                 {% endwith %}
                 
-                <h3>{{ room.name }}</h3>
-            <p>{{ room.description }}</p>
+                <h3>{{ room.title }}</h3>
                 <p>Rs: {{ room.price }} / month</p>
                 <a href="/room/{{ room.id }}">View Details</a>
             </div>
@@ -116,7 +115,6 @@
             color: #fff;
         }
  
-        /* Search Section */
         .search {
             text-align: center;
             padding: 60px 20px;
@@ -177,8 +175,7 @@
         }
         .room-cards {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(20px, 1fr));
             width: 100%;
             justify-items: center;
             grid-auto-flow: column;
@@ -189,6 +186,7 @@
         .room-card {
             background: #fff;
             border-radius: 10px;
+            width: 220px;
             box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
             text-align: center;
             padding: 30px;
@@ -243,7 +241,7 @@
                 text-align: center;
                 padding: 40px 20px;
                 position: relative;
-                width: 100%;
+                width: 97%;
                 bottom: 0;
                 box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.1);
             }
