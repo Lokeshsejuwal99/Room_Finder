@@ -7,21 +7,20 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            margin: 0;
+            margin-top: 75px;
             padding: 0;
             background-color: #f4f7fa;
         }
 
         h1 {
-            background-color: #2d87f0;
-            color: white;
+            color: black;
             padding: 20px;
             text-align: center;
-            margin: 0;
+            margin-left: -10px;
         }
 
         table {
-            width: 80%;
+            width: 90%;
             margin: 20px auto;
             border-collapse: collapse;
             background-color: white;
@@ -66,6 +65,11 @@
             font-weight: bold;
         }
 
+        .status-reject {
+            color: red;
+            font-weight: bold;
+        }
+
         .no-applications {
             text-align: center;
             font-size: 18px;
@@ -83,9 +87,6 @@
             transition: background-color 0.3s;
         }
 
-        .action-btn:hover {
-            background-color: #1f65c2;
-        }
 
         .approve-btn {
             background-color: #28a745;
@@ -94,6 +95,11 @@
         .approve-btn:hover {
             background-color: #218838;
         }
+
+        .reject-btn {
+            background-color:rgb(222, 25, 45);
+        }
+
 
         .mark-paid-btn {
             background-color: #007bff;
@@ -110,67 +116,95 @@
         .mark-unpaid-btn:hover {
             background-color: #c82333;
         }
+        header {
+            background: #222;
+            color: #fff;
+            padding: 15px;
+            text-align: left;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+        }
+        
+        header .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: white;
+            text-transform: uppercase;
+        }
+
     </style>
 </head>
+<header>
+    <a href={% url "landlord_home" %} style="text-decoration:none;">
+    <div class="logo">Room Finder</div>
+</a>
+</header>
+
 <body>
 
     <h1>Renter Applications</h1>
 
     <div class="container">
-        <table>
-            <thead>
-                <tr>
-                    <th>Renter</th>
-                    <th>Room</th>
-                    <th>Move-in Date</th>
-                    <th>Rental Duration</th>
-                    <th>Payment Status</th>
-                    <th>Approval Status</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for booking in bookings %}
+        {% if bookings %}
+            <table>
+                <thead>
                     <tr>
-                        <td>{{ booking.renter.user.username }}</td>
-                        <td>{{ booking.room.title }}</td>
-                        <td>{{ booking.move_in_date }}</td>
-                        <td>{{ booking.rental_duration }} months</td>
-                        <td>
-                            {% if booking.payment_status %}
-                                <span class="status-paid">Paid</span>
-                            {% else %}
-                                <span class="status-pending">Pending</span>
-                            {% endif %}
-                        </td>
-                        <td>
-                            {% if booking.approved %}
-                                <span class="status-approved">Approved</span>
-                            {% else %}
-                                <span class="status-pending">Pending</span>
-                            {% endif %}
-                        </td>
-                        <td>
-                            <!-- Approval button -->
-                            {% if not booking.approved %}
-                                <a href="{% url 'approve_booking' booking.id %}" class="action-btn approve-btn">Approve</a>
-                            {% endif %}
+                        <th>Renter</th>
+                        <th>Room</th>
+                        <th>Move-in Date</th>
+                        <th>Rental Duration</th>
+                        <th>Payment Status</th>
+                        <th>Approval Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for booking in bookings %}
+                        <tr>
+                            <td>{{ booking.renter.user.username }}</td>
+                            <td>{{ booking.room.title }}</td>
+                            <td>{{ booking.move_in_date }}</td>
+                            <td>{{ booking.rental_duration }} months</td>
+                            <td>
+                                {% if booking.payment_status %}
+                                    <span class="status-paid">Paid</span>
+                                {% else %}
+                                    <span class="status-pending">Pending</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if booking.approved %}
+                                    <span class="status-approved">Approved</span>
+                                {% elif booking.approved == False %}
+                                    <span class="status-reject">Rejected</span>
+                                {% else %}
+                                    <span class="status-pending">Pending</span>
+                                {% endif %}
+                                
+                            </td>
+                            <td>
+                                {% if not booking.approved %}
+                                    <a href="{% url 'approve_booking' booking.id %}" class="action-btn approve-btn">Approve</a>
+                                {% endif %}
                             
-                            <!-- Payment status toggle -->
-                            {% comment %} {% if booking.payment_status %}
-                                <a href="{% url 'update_payment_status' booking.id %}" class="action-btn mark-unpaid-btn">Mark as Unpaid</a>
-                            {% else %}
-                                <a href="{% url 'update_payment_status' booking.id %}" class="action-btn mark-paid-btn">Mark as Paid</a>
-                            {% endif %} {% endcomment %}
-                        </td>
-                    </tr>
-                {% empty %}
-                    <tr>
-                        <td colspan="7" class="no-applications">No applications found.</td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+                                {% if booking.approved %}
+                                    <form method="POST" action="{% url 'reject_booking' booking.id %}" style="display:inline-block;">
+                                        {% csrf_token %}
+                                        <button type="submit" class="action-btn reject-btn">Reject</button>
+                                    </form>
+                                {% endif %}
+                            </td>
+                            
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p class="no-applications">No applications found.</p>
+        {% endif %}
     </div>
 
 </body>

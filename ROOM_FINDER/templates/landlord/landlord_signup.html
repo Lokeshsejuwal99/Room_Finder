@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Signup as Landlord</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <header></header>
@@ -50,10 +51,6 @@
                     <label for="confirm_password">Confirm Password</label>
                     <input type="password" id="confirm_password" name="confirm_password" required>
                 </div>
-                <div class="form-group">
-                    <label for="username">Username</label>
-                    <input type="text" id="username" name="username" required>
-                </div>
             </div>
             <button type="submit" class="btn">Signup</button>
         </form>
@@ -85,7 +82,7 @@
 <style>
     body {
         font-family: Arial, sans-serif;
-        background: linear-gradient(135deg,rgb(234, 179, 26),rgb(228, 158, 28));
+        background: radial-gradient(circle, #1e1e2f, #141423);
         margin: 0;
         padding: 0;
         display: flex;
@@ -95,21 +92,21 @@
 
     .auth-container {
         max-width: 800px;
-
         width: 100%;
         margin: auto;
-        padding: 10px;
-        background-color: white;
+        padding: 20px;
+        background-color: transform;
         border-radius: 8px;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         flex: 1;
         display: flex;
         flex-direction: column;
         justify-content: center;
+        color: white;
     }
 
     h2 {
-        color: hsl(47, 87.90%, 54.70%);
+        color: hsl(125, 91.70%, 47.50%);
         margin-bottom: 20px;
         text-align: center;
     }
@@ -150,7 +147,7 @@
     .btn {
         display: inline-block;
         width: 100%;
-        background: linear-gradient(135deg,rgb(234, 179, 26),rgb(228, 158, 28));
+        background: linear-gradient(135deg, rgb(26, 234, 61), rgb(11, 255, 36));
         color: white;
         padding: 10px;
         border-radius: 5px;
@@ -168,7 +165,7 @@
     }
 
     .auth-container a {
-        color: hsl(37, 94.90%, 53.90%);
+        color: hsl(121, 94.90%, 53.90%);
         text-decoration: none;
     }
 

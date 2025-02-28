@@ -1,97 +1,171 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Customer - Reviews</title>
-</head>
-<body>
-    <header>
-        {% include 'navbar.html' %}
-    </header>
-    <main>
 
-        <section class="admin-feedbacks-container">
-            <h1>Customer - Reviews</h1>
-            <table class="feedbacks-table">
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Email</th>
-                        <th>Message</th>
-                        <th>Date</th>
-                        <th>Details</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for feedback in feedbacks %}
-                        <tr>
-                            <td>{{ feedback.name }}</td>
-                            <td>{{ feedback.email }}</td>
-                            <td>{{ feedback.comment|slice:":50" }}...</td>
-                            <td>{{ feedback.created_on }}</td>
-                            <td><a href="{% url 'feedback_detail' feedback.id %}">View Details</a></td>
-                        </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </section>
-    </main>
-</body>
+<header>
+    {% comment %} <a href="{% url 'dashboard' %}" style="text-decoration:none;"> {% endcomment %}
+        <h1>Room Finder</h1>
+    </a>
+</header>
+
+<div class="container">
+    <h2>Customer Feedback</h2>
+    <div class="top-bar">
+        <button class="manage-btn">Manage Feedbacks</button>
+        <input type="text" id="searchInput" onkeyup="searchTable()" placeholder="Search feedbacks...">
+    </div>
+
+    <table id="feedbackTable">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Message</th>
+                <th>Date</th>
+                <th>Details</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for feedback in feedbacks %}
+            <tr>
+                <td>{{ feedback.name }}</td>
+                <td>{{ feedback.email }}</td>
+                <td>{{ feedback.comment|slice:":50" }}...</td>
+                <td>{{ feedback.created_on }}</td>
+                <td><a href="{% url 'feedback_detail' feedback.id %}" class="view-details">View Details</a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<script>
+function searchTable() {
+    let input = document.getElementById("searchInput").value.toLowerCase();
+    let rows = document.querySelectorAll("#feedbackTable tbody tr");
+    rows.forEach(row => {
+        let text = row.innerText.toLowerCase();
+        row.style.display = text.includes(input) ? "" : "none";
+    });
+}
+</script>
 
 <style>
-
     body {
-    background: radial-gradient(circle, #1e1e2f, #141423);
-    font-family: Arial, sans-serif;
-}
+        font-family: 'Arial', sans-serif;
+        background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
+        color: white;
+        margin: 0;
+        padding: 0;
+    }
 
-.admin-feedbacks-container {
-    max-width: 1000px;
-    margin: 50px auto;
-    padding: 20px;
-    background-color: white;
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
+    header {
+        width: 100%;
+        background: #141423;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        position: sticky;
+        top: 0;
+        z-index: 10;
+    }
 
-.admin-feedbacks-container h1 {
-    font-size: 26px;
-    margin-bottom: 30px;
-    text-align: center;
-}
+    header h1 {
+        color: #23f014;
+        font-size: 24px;
+    }
 
-.feedbacks-table {
-    width: 100%;
-    border-collapse: collapse;
-}
+    .container {
+        max-width: 1200px;
+        margin: 20px auto;
+        background: #232334;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    }
 
-.feedbacks-table th, .feedbacks-table td {
-    padding: 10px;
-    text-align: left;
-    border: 1px solid #ddd;
-}
+    h2 {
+        text-align: center;
+        color: #23f014;
+        font-size: 28px;
+        margin-bottom: 20px;
+    }
 
-.feedbacks-table th {
-    background-color: #007bff;
-    color: white;
-}
+    .top-bar {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 10px;
+    }
 
-.feedbacks-table tr:nth-child(even) {
-    background-color: #f9f9f9;
-}
+    .manage-btn {
+        background-color: #007bff;
+        color: white;
+        padding: 10px 15px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
 
-.feedbacks-table tr:hover {
-    background-color: #f1f1f1;
-}
+    .manage-btn:hover {
+        background-color: #0056b3;
+    }
 
-.feedbacks-table a {
-    color: #007bff;
-    text-decoration: none;
-}
+    #searchInput {
+        padding: 8px;
+        width: 200px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
 
-.feedbacks-table a:hover {
-    text-decoration: underline;
-}
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 10px;
+    }
+
+    th, td {
+        padding: 12px;
+        text-align: left;
+        border-bottom: 1px solid #444;
+    }
+
+    th {
+        background: #2c2c3c;
+    }
+
+    td {
+        background: #1e1e2d;
+        border: 2px solidrgb(62, 62, 74);
+    }
+
+    .view-details {
+        background: #23f014;
+        color: black;
+        padding: 5px 10px;
+        text-decoration: none;
+        font-size: 14px;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    .view-details:hover {
+        background: #1db010;
+    }
+
+    @media (max-width: 768px) {
+        header {
+            flex-direction: column;
+            text-align: center;
+        }
+
+        .container {
+            padding: 15px;
+        }
+
+        h2 {
+            font-size: 24px;
+        }
+
+        table th, table td {
+            font-size: 12px;
+        }
+    }
 </style>
-</html>

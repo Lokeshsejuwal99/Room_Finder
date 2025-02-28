@@ -5,10 +5,10 @@
         <h2 style="color:white">Room Finder Admin</h2>
         <nav>
             <ul>
-                <li><a href="{% url "manage_rooms" %}">Manage Rooms</a></li>
+                <li><a href="{% url "admin_manage_rooms" %}">Manage Rooms</a></li>
                 <li><a href="{% url "manage_landlords" %}">Manage Landlords</a></li>
                 <li><a href="{% url "manage_renters" %}">Manage Renters</a></li>
-                <li><a href="#">Bookings</a></li>
+                <li><a href="{% url "all_bookings" %}">Bookings</a></li>
                 <li><a href="{% url "admin_feedbacks" %}">Reviews</a></li>
                 <li><a href="{% url 'logout' %}">Logout</a></li>
             </ul>
@@ -43,21 +43,13 @@
             </div>
         </section>
 
-        <!-- Room Status Overview -->
-        <section class="room-status">
-            <h2>Room Status Overview</h2>
-            <div class="room-chart">
-                <canvas id="roomChart"></canvas>
-            </div>
-        </section>
-
         <!-- Recent Bookings -->
         <section class="recent-bookings">
             <h2>Recent Bookings</h2>
             <table>
                 <thead>
                     <tr>
-                        <th>#</th>
+                        <th>S.N.</th>
                         <th>Room Name</th>
                         <th>User</th>
                         <th>Booking Date</th>
@@ -69,9 +61,9 @@
                     {% for booking in recent_bookings %}
                     <tr>
                         <td>{{ forloop.counter }}</td>
-                        <td>{{ booking.room_name }}</td>
-                        <td>{{ booking.user_name }}</td>
-                        <td>{{ booking.date }}</td>
+                        <td>{{ booking.room.title }}</td>
+                        <td>{{ booking.renter.user }}</td>
+                        <td>{{ booking.booking_date }}</td>
                         <td>{{ booking.status }}</td>
                         <td>
                             <a href="#" class="btn-action">View</a>
@@ -157,14 +149,11 @@
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         text-align: center;
     }
-
-    .room-status {
-        background-color: white;
-        padding: 20px;
-        border-radius: 8px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        margin-bottom: 20px;
+    .stat p {
+        color: blue;
+        font-weight: bold;
     }
+
 
     .recent-bookings {
         background-color: white;
@@ -177,16 +166,19 @@
         width: 100%;
         border-collapse: collapse;
         margin-top: 10px;
+        border: 2px solid black;
     }
 
     th, td {
-        border: 1px solid #ddd;
+        border: 1px solid black;
+        color: black;
         padding: 10px;
         text-align: left;
     }
 
     th {
         background-color: #f4f4f9;
+        color: black;
     }
 
     section{

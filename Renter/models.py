@@ -15,10 +15,21 @@ class Renter(models.Model):
 
 
 class Booking(models.Model):
+    PENDING = 'Pending'
+    APPROVED = 'Approved'
+    REJECTED = 'Rejected'
+
+    STATUS_CHOICES = [
+        (PENDING, 'Pending'),
+        (APPROVED, 'Approved'), 
+        (REJECTED, 'Rejected'),
+    ]
+    
     room = models.ForeignKey(Room, on_delete=models.CASCADE, related_name='bookings')
     renter = models.ForeignKey(Renter, on_delete=models.CASCADE, related_name='bookings')
     booking_date = models.DateTimeField(auto_now_add=True, null=True)
     move_in_date = models.DateField()
+    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default=PENDING, null=True)
     rental_duration = models.CharField(help_text="Duration in months", max_length=40)
     payment_status = models.BooleanField(default=False)
     approved = models.BooleanField(default=False, null=True)

@@ -31,7 +31,7 @@
         /* Page Content Styles */
         body {
             font-family: Arial, sans-serif;
-            background: rgb(19, 28, 56);
+            background: radial-gradient(circle, #1e1e2f, #141423);
             margin: 0;
             padding: 0;
             display: flex;
@@ -42,8 +42,8 @@
         }
 
         .container {
-            width: 90%;
-            max-width: 900px;
+            width: 100%;
+            max-width: 1100px;
             background: white;
             padding: 20px;
             border-radius: 10px;
@@ -73,7 +73,7 @@
         }
 
         th {
-            background-color: #4CAF50;
+            background-color:rgb(33, 116, 218);
             color: white;
         }
 
@@ -118,6 +118,24 @@
             color: #777;
             margin-top: 20px;
         }
+        .badge {
+            padding: 5px 10px;
+            font-size: 14px;
+            border-radius: 5px;
+            color: white;
+        }
+        
+        .badge.pending {
+            background-color: orange;
+        }
+        
+        .badge.approved {
+            background-color: green;
+        }
+        
+        .badge.rejected {
+            background-color: red;
+        }
     </style>
 </head>
 <body>
@@ -138,6 +156,7 @@
                     <th>Move-In Date</th>
                     <th>Rental Duration</th>
                     <th>Booking Date</th>
+                    <th>Status</th>
                     <th>Payment Status</th>
                     <th>Actions</th>
                 </tr>
@@ -150,6 +169,15 @@
                         <td>{{ booking.move_in_date }}</td>
                         <td>{{ booking.rental_duration }}</td>
                         <td>{{ booking.booking_date|date:"F d, Y" }}</td>
+                        <td>
+                            {% if booking.status == 'Pending' %}
+                              <span class="badge pending">Pending</span>
+                            {% elif booking.status == 'Approved' %}
+                              <span class="badge approved">Approved</span>
+                            {% elif booking.status == 'Rejected' %}
+                              <span class="badge rejected">Rejected</span>
+                            {% endif %}
+                          </td>
                         <td>
                             {% if booking.payment_status %}
                                 <span class="badge paid">Paid</span>

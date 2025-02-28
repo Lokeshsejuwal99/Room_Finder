@@ -106,7 +106,6 @@ def admin_login(request):
 
 def landlord_signup(request):
     if request.method == 'POST':
-        username = request.POST['username']
         email = request.POST['email']
         first_name = request.POST['first_name']
         last_name = request.POST['last_name']
@@ -116,26 +115,20 @@ def landlord_signup(request):
 
         if password != confirm_password:
             messages.error(request, "Passwords do not match!")
-            print("Passwords do not match!")  # Debugging statement
-            return redirect('landlord_signup')
-
-        if User.objects.filter(username=username).exists():
-            messages.error(request, "Username already exists!")
-            print("Username already exists!")  # Debugging statement
+            print("Passwords do not match!")
             return redirect('landlord_signup')
 
         if User.objects.filter(email=email).exists():
             messages.error(request, "Email already registered!")
-            print("Email already registered!")  # Debugging statement
+            print("Email already registered!")
             return redirect('landlord_signup')
 
         # Create user
-        user = User.objects.create_user(username=username, email=email, first_name=first_name, last_name=last_name, password=password)
-        print(f"User created: {user}")  # Debugging statement
+        user = User.objects.create_user(email=email, first_name=first_name, last_name=last_name, password=password)
+        print(f"User created: {user}")
 
-        # Ensure the Landlord object is created and associated with the user
         landlord = Landlord.objects.create(user=user, contact_number=contact_number, is_landlord=True)
-        print(f"Landlord created: {landlord}")  # Debugging statement
+        print(f"Landlord created: {landlord}")
 
         messages.success(request, "Signup successful! You can now log in.")
         return redirect('landlord_login')
@@ -151,45 +144,78 @@ def landlord_login(request):
 
         try:
             user = User.objects.get(email=email)
-            print(f"User found: {user}")  # Debugging statement
+            print(f"User found: {user}")
         except User.DoesNotExist:
-            print("User does not exist!")  # Debugging statement
+            print("User does not exist!")
             user = None
 
         if user:
-            print(f"User exists and has landlord: {hasattr(user, 'landlord')}")  # Debugging statement
+            print(f"User exists and has landlord: {hasattr(user, 'landlord')}")
             if hasattr(user, 'landlord'):
                 user = authenticate(request, username=user.username, password=password)
                 if user is not None:
-                    print("Authentication successful!")  # Debugging statement
+                    print("Authentication successful!")
                     login(request, user)
                     return redirect('landlord_home')
                 else:
-                    print("Authentication failed!")  # Debugging statement
+                    print("Authentication failed!")
             else:
-                print("User is not a landlord!")  # Debugging statement
+                print("User is not a landlord!")
 
         messages.error(request, "Invalid credentials or not a landlord!")
-        print("Invalid credentials or not a landlord!")  # Debugging statement
+        print("Invalid credentials or not a landlord!")
         return redirect('landlord_login')
 
     return render(request, 'landlord/landlord_login.html')
 
  
 def manage_landlords(request):
-    return render(request, "manage_landlords.html")
+    landlord = Landlord.objects.all()
+    context = {
+        'landlords': landlord,
+    }
+    return render(request, "manage_landlords.html", context)
+
+
+def delete_landlord(request, landlord_id):
+    if request.method == "POST":
+        landlord = get_object_or_404(Landlord, id=landlord_id)
+        landlord.delete()
+        messages.success(request, "Landlord deleted successfully!")
+    return redirect('manage_landlords') 
+
 
 def manage_renters(request):
-    return render(request, "manage_renters.html")
+    renters = Renter.objects.all()
+    context = {
+        'renters': renters
+    }
+    return render(request, "manage_renters.html", context)
+
+
+def delete_renter(request, renter_id):
+    if request.method == "POST":
+        renter = get_object_or_404(Renter, id=renter_id)
+        renter.delete()
+        messages.success(request, "Renter deleted successfully!")
+    return redirect('manage_renters') 
+
 
 def admin_dashboard(request):
-    landlords_list = Landlord.objects.all()
+    landlords_list = Landlord.objects.all().count()
     renters_list = Renter.objects.all()
-    rooms = Room.objects.all()
+    rooms = Room.objects.all().count()
+    total_users = User.objects.all().count()
+    available_rooms = Room.objects.filter(is_available=True).count()
+    recent_bookings = Booking.objects.all().order_by('-booking_date')
     context = {
         'landlords_list' : landlords_list,
         'renters_list' : renters_list,
-        'rooms' : rooms
+        'total_rooms' : rooms,
+        'active_users' : total_users,
+        'available_rooms' : available_rooms,
+        'recent_bookings': recent_bookings,
+    
     }
     return render(request, 'admin_home.html', context)
 
@@ -251,6 +277,17 @@ def room_details(request, room_id):
 
     return render(request, "room_details.html", {"room": room, "reviews": reviews})
 
+
+def admin_manage_rooms(request):
+    rooms = Room.objects.all()
+    return render(request, "admin_manage_rooms.html", {"rooms": rooms})
+
+def all_bookings(request):
+    bookings = Booking.objects.all()
+    context = {
+        "bookings" : bookings,
+    }
+    return render(request, "all_bookings.html", context)
 
 def Logout(request):
     logout(request)

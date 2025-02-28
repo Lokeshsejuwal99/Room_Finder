@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+  <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -14,7 +14,7 @@
       }
       body {
         font-family: "Arial", sans-serif;
-        background-color: #f9f9f9;
+        background: radial-gradient(circle, #1e1e2f, #141423);
         color: #333;
       }
       header {
@@ -37,7 +37,7 @@
       }
 
       .container {
-        width: 80%;
+        width: 90%;
         margin: 30px auto;
         margin-top: 100px;
         background-color: #fff;
@@ -99,6 +99,26 @@
         border: none;
         border-radius: 5px;
       }
+
+      .badge {
+        padding: 5px 10px;
+        font-size: 14px;
+        border-radius: 5px;
+        color: white;
+    }
+    
+    .badge.pending {
+        background-color: orange;
+    }
+    
+    .badge.approved {
+        background-color: green;
+    }
+    
+    .badge.rejected {
+        background-color: red;
+    }
+    
     </style>
   </head>
   <body>

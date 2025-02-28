@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .models import Room, RoomImage, Landlord
 from django.contrib.auth.decorators import login_required
 from .forms import RoomForm
+from django.contrib import messages
 from django.http import JsonResponse
 from Renter.models import Booking
 from .decorators import landlord_required
@@ -122,3 +123,15 @@ def approve_booking(request, booking_id):
 
     # Redirect to a relevant page (e.g., landlord's application page or room details)
     return redirect('view_applications')  
+
+
+
+def reject_booking(request, booking_id):
+    if request.method == 'POST':
+        booking = get_object_or_404(Booking, id=booking_id)
+        booking.approved = False  # Reject the booking by setting approval status to False
+        booking.save()
+        print(f"Booking {booking_id} rejected. Approval status: {booking.approved}")  # Debugging line
+        return redirect('view_applications')  # Redirect to the applications page after rejecting the booking
+    return redirect('view_applications')  # If it's not POST, just redirect
+
