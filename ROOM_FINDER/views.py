@@ -21,7 +21,7 @@ def homepage(request):
         rooms = paginator.page(paginator.num_pages)
 
     if rooms.number == paginator.num_pages and rooms.has_previous():
-        next_page = None  # No next page
+        next_page = None
     else:
         next_page = rooms.next_page_number() if rooms.has_next() else None
 
@@ -39,10 +39,8 @@ def about_view(request):
 
 def feedback_view(request, room_id=None):
     if room_id:
-        # Fetch the room if it's a room-specific review
         room = get_object_or_404(Room, id=room_id)
     else:
-        # Otherwise, it's for general feedback, no specific room
         room = None
 
     if request.method == 'POST':
@@ -50,9 +48,8 @@ def feedback_view(request, room_id=None):
         email = request.POST.get('email')
         message = request.POST.get('message')
 
-        if room:  # Room-specific review
+        if room:
             if request.user.is_authenticated:
-                # Ensure only previous renters can leave a review
                 if Booking.objects.filter(room=room, renter=request.user.renter).exists():
                     review = Review(name=request.user.username, email=request.user.email, comment=message, room=room, renter=request.user.renter)
                 else:
@@ -61,18 +58,16 @@ def feedback_view(request, room_id=None):
                 # If not logged in, prompt user to log in
                 return redirect('renter_login')
         else:  # General feedback
-            review = Review(name=name, email=email, comment=message, room=None)  # No room for general feedback
+            review = Review(name=name, email=email, comment=message, room=None)
 
         review.save()
         return redirect('feedbacks')  # Redirect to feedbacks page or room detail page
 
-    # For viewing the reviews
     if room:
         reviews = Review.objects.filter(room=room).order_by('-created_on')
         user_has_booked = Booking.objects.filter(room=room, renter=request.user.renter).exists() if request.user.is_authenticated else False
         return render(request, 'room_details.html', {'room': room, 'reviews': reviews, 'user_has_booked': user_has_booked})
     else:
-        # For general feedback page
         feedbacks = Review.objects.filter(room__isnull=True).order_by('-created_on')
         return render(request, 'feedback.html', {'feedbacks': feedbacks})
     
@@ -273,7 +268,7 @@ def renter_login(request):
 
 def room_details(request, room_id):
     room = get_object_or_404(Room, id=room_id)
-    reviews = room.reviews.all()  # Fetch all reviews
+    reviews = room.reviews.all()
 
     return render(request, "room_details.html", {"room": room, "reviews": reviews})
 

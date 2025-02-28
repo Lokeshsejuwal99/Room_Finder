@@ -8,8 +8,6 @@ from datetime import datetime
 from .decorators import renter_required
 
 
-# Create your views here.
-
 @login_required
 @renter_required
 def renter_home(request):
@@ -89,12 +87,9 @@ def view_bookings(request):
 @login_required
 def cancel_booking(request, booking_id):
     booking = get_object_or_404(Booking, id=booking_id)
-
-    # Mark the room as available again
     booking.room.is_available = True
     booking.room.save()
 
-    # Delete booking, but NOT the reviews
     booking.delete()
     
     messages.success(request, "Your booking has been canceled. The room is now available again.")
@@ -102,7 +97,6 @@ def cancel_booking(request, booking_id):
 
 @login_required
 def view_rooms(request):
-    # bookings = Booking.objects.filter(renter=request.user.renter).select_related("room")
     bookings = Booking.objects.filter(renter=request.user.renter).exclude(status='Rejected').select_related("room")
 
     if request.method == "POST":

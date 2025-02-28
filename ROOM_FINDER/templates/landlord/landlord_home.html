@@ -15,7 +15,6 @@
         </nav>
     </header>
 
-    <!-- Main Content -->
     <main>
         <div class="welcome-section">
             <h1>Welcome, {{ request.user.username }}!</h1>
@@ -23,28 +22,24 @@
         </div>
 
         <div class="cards-container">
-            <!-- My Properties -->
             <div class="card">
                 <h2>My Properties</h2>
                 <p>View and manage the rooms you have listed for rent.</p>
                 <a href="{% url 'manage_rooms' %}">Manage Properties</a>
             </div>
 
-            <!-- Post a Room -->
             <div class="card">
                 <h2>Post a Room</h2>
                 <p>Add a new room listing and attract potential renters.</p>
                 <a href="{% url 'post_room' %}">Post Room</a>
             </div>
 
-            <!-- Renter Applications -->
             <div class="card">
                 <h2>Renter Applications</h2>
                 <p>Review applications from prospective renters.</p>
                 <a href="{% url "view_applications" %}">View Applications</a>
             </div>
 
-            <!-- Payments -->
             <div class="card">
                 <h2>Payments</h2>
                 <p>Track and manage rental payments from tenants.</p>

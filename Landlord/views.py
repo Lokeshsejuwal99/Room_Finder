@@ -8,8 +8,6 @@ from Renter.models import Booking
 from .decorators import landlord_required
 
 
-# Create your views here.
-
 @login_required
 @landlord_required
 def landlord_home(request):
@@ -93,35 +91,22 @@ def upload_room_image(request, room_id):
 @login_required
 def view_applications(request):
     try:
-        # Get the landlord instance associated with the current user
         landlord = Landlord.objects.get(user=request.user)
-
-        # Get all rooms owned by this landlord
         rooms = Room.objects.filter(owner=landlord)
-
-        # Get all bookings for these rooms
         bookings = Booking.objects.filter(room__in=rooms)
-
         return render(request, 'landlord/view_applications.html', {'bookings': bookings})
-
     except Landlord.DoesNotExist:
         return render(request, 'landlord/error.html', {'message': "Landlord not found."})
 
 
 def approve_booking(request, booking_id):
-    # Assuming you're passing booking_id to approve a specific booking
     booking = get_object_or_404(Booking, id=booking_id)
-
-    # Update the 'approved' field to True when the landlord approves the booking
     booking.approved = True
     booking.save()
 
-    # Optionally, you might want to update room availability here as well
     room = booking.room
-    room.is_available = False  # Mark the room as unavailable if it's now booked
+    room.is_available = False
     room.save()
-
-    # Redirect to a relevant page (e.g., landlord's application page or room details)
     return redirect('view_applications')  
 
 
@@ -129,9 +114,7 @@ def approve_booking(request, booking_id):
 def reject_booking(request, booking_id):
     if request.method == 'POST':
         booking = get_object_or_404(Booking, id=booking_id)
-        booking.approved = False  # Reject the booking by setting approval status to False
+        booking.approved = False
         booking.save()
-        print(f"Booking {booking_id} rejected. Approval status: {booking.approved}")  # Debugging line
-        return redirect('view_applications')  # Redirect to the applications page after rejecting the booking
-    return redirect('view_applications')  # If it's not POST, just redirect
-
+        return redirect('view_applications')
+    return redirect('view_applications')
