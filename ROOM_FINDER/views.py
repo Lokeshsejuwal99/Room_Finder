@@ -7,12 +7,27 @@ from Renter.models import Renter, Review, Booking
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 
+
 def homepage(request):
     room_list = Room.objects.filter(is_available=True)
 
-    paginator = Paginator(room_list, 4)
+    # Get search parameters from GET request
+    location = request.GET.get('location', '')
+    max_price = request.GET.get('max_price', '')
 
+    if location:
+        room_list = room_list.filter(location__icontains=location)  # Case-insensitive match
+
+    if max_price:
+        try:
+            max_price = float(max_price)
+            room_list = room_list.filter(price__lte=max_price)  # Filter by max price
+        except ValueError:
+            pass  # Ignore invalid price input
+
+    paginator = Paginator(room_list, 4)
     page = request.GET.get('page', 1)
+    
     try:
         rooms = paginator.page(page)
     except PageNotAnInteger:
@@ -20,14 +35,13 @@ def homepage(request):
     except EmptyPage:
         rooms = paginator.page(paginator.num_pages)
 
-    if rooms.number == paginator.num_pages and rooms.has_previous():
-        next_page = None
-    else:
-        next_page = rooms.next_page_number() if rooms.has_next() else None
+    return render(request, 'homepage.html', {
+        'rooms': rooms,
+        'location': location,
+        'max_price': max_price
+    })
 
-    return render(request, 'homepage.html', {'rooms': rooms, 'next_page': next_page})
-
-
+    
 def login_as_view(request):
     return render(request, 'login_as.html')
 

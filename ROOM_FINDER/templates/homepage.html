@@ -21,14 +21,24 @@
         </div>
     </header>
 
-    <section class="search">
+    {% comment %} <section class="search">
         <h1>Find Your Perfect Room</h1>
         <form action="/search" method="GET">
             <input type="text" name="location" placeholder="Enter location" required>
             <input type="number" name="max_price" placeholder="Max price" required>
             <button type="submit">Search</button>
         </form>
+    </section> {% endcomment %}
+
+    <section class="search">
+        <h1>Find Your Perfect Room</h1>
+        <form action="" method="GET">
+            <input type="text" name="location" placeholder="Enter location" value="{{ location }}">
+            <input type="number" name="max_price" placeholder="Max price" value="{{ max_price }}">
+            <button type="submit">Search</button>
+        </form>
     </section>
+    
 
     <section class="rooms">
         <h2>Available Rooms</h2>
