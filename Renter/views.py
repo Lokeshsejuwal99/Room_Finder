@@ -2,10 +2,19 @@ from django.http import JsonResponse
 from django.contrib import messages
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Renter, Booking, Room, Review
+from Landlord.models import Payment
 from django.contrib.auth.decorators import login_required
 from .forms import BookingForm
 from datetime import datetime
 from .decorators import renter_required
+from django.http import HttpResponse, HttpResponseBadRequest
+from django.shortcuts import get_object_or_404
+import json
+from decimal import Decimal
+import base64
+from time import timezone
+import uuid
+from urllib.parse import urlencode
 
 
 @login_required
@@ -21,35 +30,35 @@ def renter_home(request):
  return render(request, 'renter/renter_home.html', context)
 
 
-@login_required
-def book_room(request, room_id):
-    room = get_object_or_404(Room, id=room_id)
+# @login_required
+# def book_room(request, room_id):
+#     room = get_object_or_404(Room, id=room_id)
     
-    try:
-        renter_profile = request.user.renter
-    except Renter.DoesNotExist:
-        return redirect('some_error_page')
+#     try:
+#         renter_profile = request.user.renter
+#     except Renter.DoesNotExist:
+#         return redirect('some_error_page')
 
-    if request.method == 'POST':
-        form = BookingForm(request.POST)
-        if form.is_valid():
-            booking = form.save(commit=False)
-            booking.room = room
-            booking.renter = renter_profile
-            booking.save()
+#     if request.method == 'POST':
+#         form = BookingForm(request.POST)
+#         if form.is_valid():
+#             booking = form.save(commit=False)
+#             booking.room = room
+#             booking.renter = renter_profile
+#             booking.save()
             
-            print(f"Booking_id: {booking.id}")
-            if booking.id:
-                return redirect('booking_confirmation', booking_id=booking.id)
-            else:
-                print("Booking ID is not available!")
+#             print(f"Booking_id: {booking.id}")
+#             if booking.id:
+#                 return redirect('booking_confirmation', booking_id=booking.id)
+#             else:
+#                 print("Booking ID is not available!")
 
-        else:
-            print(form.errors)
-    else:
-        form = BookingForm()
+#         else:
+#             print(form.errors)
+#     else:
+#         form = BookingForm()
 
-    return render(request, 'renter/book_now.html', {'room': room, 'form': form})
+#     return render(request, 'renter/book_now.html', {'room': room, 'form': form})
 
 
 @login_required
@@ -145,3 +154,95 @@ def submit_review(request, room_id):
         return redirect(request.META.get('HTTP_REFERER', 'view_room'))
 
     return JsonResponse({"success": False})
+
+
+
+def book_room(request, id):
+    if request.method == 'GET':  # ✅ Allow GET requests
+        return render(request, 'renter/book_now.html', {'room_id': id})  # Render form
+
+    elif request.method == 'POST':  # ✅ Handle form submission
+        amount = request.POST.get('amount')
+        room_id = request.POST.get('room_id')
+
+        if not room_id:
+            return HttpResponseBadRequest("Room ID is required.")
+
+        name = request.POST.get('name')
+        email = request.POST.get('email')
+        phone = request.POST.get('phone')
+
+        transaction_id = str(uuid.uuid4())
+        merchant_code = 'EPAYTEST'
+
+        context = {
+            'amount': amount,
+            'merchant_code': merchant_code,
+            'product_id': room_id,
+            'transaction_id': transaction_id,
+            'success_url': 'http://127.0.0.1:8000/success/',
+            'failure_url': 'http://127.0.0.1:8000/failure/',
+            'name': name,
+            'email': email,
+            'phone': phone
+        }
+
+        return render(request, 'renter/book_now.html', context)
+
+    return HttpResponse("Invalid request method.", status=405)
+    
+def payment_success(request, name, email, room_id, phone, move_in_date, rental_duration):
+    encoded_str = request.GET.get('data')
+
+    if not encoded_str:
+        return HttpResponseBadRequest("Missing payment data")
+
+    try:
+        decoded_bytes = base64.b64decode(encoded_str)
+        decoded_str = decoded_bytes.decode('utf-8')
+        decoded_json = json.loads(decoded_str)
+
+        amount = decoded_json.get('total_amount', '0').replace(',', '')  # Clean amount
+        transaction_id = decoded_json.get("transaction_uuid")
+        payment_amount = Decimal(amount)
+
+    except (json.JSONDecodeError, base64.binascii.Error, Decimal.InvalidOperation) as e:
+        return HttpResponseBadRequest(f"Error decoding or converting payment data: {e}")
+
+    if not room_id:
+        return HttpResponseBadRequest("Room ID is missing in the response.")
+
+    room = get_object_or_404(Room, id=room_id)
+    room.total_booked_amount += payment_amount
+    room.save()
+
+    renter = get_object_or_404(Renter, user__email=email)
+    renter.save()
+
+    # Save booking details
+    Booking.objects.create(
+        room=room,
+        renter=renter,
+        move_in_date=move_in_date,
+        rental_duration=rental_duration,
+        status="success",
+        payment_amount=payment_amount,
+        payment_status=True,
+    )
+
+    context = {
+        'ref_id': transaction_id,
+        'amount': payment_amount,
+        'room': room,
+        'renter': renter,
+        'phone': phone,
+        'move_in_date': move_in_date,
+        'rental_duration': rental_duration, 
+    }
+
+    return render(request, 'renter/payment_success.html', context)
+
+
+
+def payment_failure(request):
+    return render(request, 'renter/payment_failure.html')

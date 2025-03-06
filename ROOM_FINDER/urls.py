@@ -18,12 +18,14 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from .views import *
+from Renter.views import *
 from django.conf.urls.static import static
 from django.conf import settings
 urlpatterns = [
     path('', homepage, name='homepage'),
     path('landlord/', include('Landlord.urls')),
     path('renter/', include('Renter.urls')),
+    
     path('admin/', admin.site.urls),
     path('feedbacks/', feedback_view, name='feedbacks'),
     path('about/', about_view, name='about'),
@@ -45,7 +47,14 @@ urlpatterns = [
     path('admin_feedbacks/', admin_feedbacks, name='admin_feedbacks'),
     path('admin_feedbacks/<int:feedback_id>/', feedback_detail, name='feedback_detail'),
     path('logout/', Logout, name='logout'),
+    path('payment/<int:id>/', book_room, name='initiate_payment'),
+    path('success/name/<str:name>/email/<str:email>/room_id/<int:room_id>/phone/<str:phone>/move_in_date/<str:move_in_date>/rental_duration/<str:rental_duration>/', payment_success, name='esewa_success'),
+        # path('success/name/<str:name>/email/<str:email>/room_id/<int:room_id>/phone/<str:phone>/', payment_success, name='esewa_success'),
+    path('failure/', payment_failure, name='esewa_failure'),
+
 
 ]
+
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    

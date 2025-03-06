@@ -33,7 +33,8 @@ class Booking(models.Model):
     rental_duration = models.CharField(help_text="Duration in months", max_length=40)
     payment_status = models.BooleanField(default=False)
     approved = models.BooleanField(default=False, null=True)
-    
+    payment_amount = models.DecimalField(max_digits=10, decimal_places=2, default=0.00, null=True)  # New field for payment amount
+
     
     def save(self, *args, **kwargs):
         """Override save method to mark room as unavailable upon booking."""

@@ -19,6 +19,7 @@ class Room(models.Model):
         ('Double', 'Double'),
         ('Flat', 'Flat'),
     ]
+    
     owner = models.ForeignKey(Landlord, on_delete=models.CASCADE, null=True)
     title = models.CharField(max_length=255)
     price = models.DecimalField(max_digits=10, decimal_places=2)
@@ -27,7 +28,9 @@ class Room(models.Model):
     room_type = models.CharField(choices=ROOM_TYPE, max_length=10, null=True, default="Single")
     is_available = models.BooleanField(default=True)      
     image = models.ManyToManyField('RoomImage', related_name='rooms')
+    total_booked_amount = models.DecimalField(max_digits=10, decimal_places=2, default=0.00, null=True)
 
+    
     def __str__(self):
         return self.title
 
@@ -38,3 +41,22 @@ class RoomImage(models.Model):
     
     def __str__(self):
         return self.room.title
+
+class Payment(models.Model):
+    STATUS_CHOICES = [
+        ('Pending', 'Pending'),
+        ('Completed', 'Completed'),
+        ('Failed', 'Failed'),
+    ]
+
+    renter = models.ForeignKey(User, on_delete=models.CASCADE, related_name="payments")  # The renter making the payment
+    room = models.ForeignKey(Room, on_delete=models.CASCADE, related_name="payments")  # The room being booked
+    amount = models.DecimalField(max_digits=10, decimal_places=2)
+    transaction_id = models.CharField(max_length=100, unique=True)
+    reference_id = models.CharField(max_length=100, null=True, blank=True)  # eSewa Reference ID after success
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='Pending')
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"{self.renter.username} - {self.room.title} - {self.status}"

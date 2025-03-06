@@ -133,3 +133,18 @@ LOGOUT_REDIRECT_URL = 'landlord_login'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+ESEWA_ID = '9806800001'
+ESEWA_PASSWORD = 'Nepal@123'
+ESEWA_MPIN = '1122'
+ESEWA_MERCHANT_ID = 'EPAYTEST'
+ESEWA_TOKEN = '123456'
+
+# For Epay-v2
+ESEWA_SECRET_KEY = '8gBm/:&EnhH.1/q'
+
+# For SDK Integration
+ESEWA_CLIENT_ID = 'JB0BBQ4aD0UqIThFJwAKBgAXEUkEGQUBBAwdOgABHD4DChwUAB0R'
+ESEWA_CLIENT_SECRET = 'BhwIWQQADhIYSxILExMcAgFXFhcOBwAKBgAXEQ=='
+
