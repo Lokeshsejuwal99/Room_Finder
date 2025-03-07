@@ -4,73 +4,68 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Payment Successful</title>
-
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f4f4f4;
+            padding: 20px;
+        }
+        .container {
+            max-width: 500px;
+            margin: 50px auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .success-icon {
+            font-size: 50px;
+            color: green;
+        }
+        .ref-id {
+            font-weight: bold;
+            color: #333;
+        }
+        .details {
+            text-align: left;
+            margin-top: 20px;
+            padding: 10px;
+            background: #f9f9f9;
+            border-radius: 5px;
+        }
+        .details p {
+            margin: 5px 0;
+        }
+        a {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background: green;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        a:hover {
+            background: darkgreen;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
         <div class="success-icon">✔️</div>
-        <h1>Thank You for Your Donation!</h1>
-        <p>Your payment is successful.</p>
+        <h2>Your Booking is Successful</h2>
         <p class="ref-id">Transaction Reference ID: {{ ref_id }}</p>
-        <p>We appreciate your support.</p>
-        <a href="{% url 'homepage' %}">Go back to homepage</a>
+        
+        <div class="details">
+            <p><strong>Room Name:</strong> {{ room.name }}</p>
+            <p><strong>Renter Name:</strong> {{ renter.user.username }}</p>
+            <p><strong>Move-in Date:</strong> {{ move_in_date }}</p>
+            <p><strong>Rental Duration:</strong> {{ rental_duration }} days</p>
+            <p><strong>Amount Paid:</strong> Rs. {{ amount }}</p>
+        </div>
+
+        <a href="{% url 'renter_home' %}">Go back to homepage</a>
     </div>
 </body>
-<style>
-    body {
-        font-family: 'Arial', sans-serif;
-        background-color: #f4f4f4;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-        margin: 0;
-    }
-
-    .container {
-        background-color: #fff;
-        padding: 30px 40px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        text-align: center;
-        border-radius: 8px;
-    }
-
-    .container h1 {
-        color: #4CAF50;
-        font-size: 24px;
-        margin-bottom: 20px;
-    }
-
-    .container p {
-        color: #333;
-        font-size: 16px;
-        margin: 10px 0;
-    }
-
-    .container p.ref-id {
-        font-weight: bold;
-        color: #4CAF50;
-    }
-
-    .container a {
-        display: inline-block;
-        margin-top: 20px;
-        padding: 10px 20px;
-        background-color: #4CAF50;
-        color: #fff;
-        text-decoration: none;
-        border-radius: 5px;
-        transition: background-color 0.3s;
-    }
-
-    .container a:hover {
-        background-color: #45a049;
-    }
-
-    .success-icon {
-        font-size: 50px;
-        color: #4CAF50;
-        margin-bottom: 20px;
-    }
-</style>
 </html>

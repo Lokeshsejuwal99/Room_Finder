@@ -19,45 +19,9 @@
         action="https://rc-epay.esewa.com.np/api/epay/main/v2/form"
         method="POST"
         onsubmit="generateSignature()"
-        target="_blank"
+        target="_blank"\
       >
-        <!-- Name input -->
-        <div class="form-group">
-          <label for="name">Full Name</label>
-          <input
-            type="text"
-            name="name"
-            id="name"
-            placeholder="Enter your full name"
-            required
-          />
-        </div>
-
-        <!-- Email input -->
-        <div class="form-group">
-          <label for="email">Email Address</label>
-          <input
-            type="email"
-            name="email"
-            id="email"
-            placeholder="Enter your email"
-            required
-          />
-        </div>
-
-        <!-- Phone number input -->
-        <div class="form-group">
-          <label for="phone">Phone Number</label>
-          <input
-            type="text"
-            name="phone"
-            id="phone"
-            placeholder="Enter your phone number"
-            required
-          />
-        </div>
-
-        <!-- Move-in Date Input -->
+      
         <div class="form-group">
             <label for="move_in_date">Move-in Date</label>
             <input
@@ -69,7 +33,6 @@
             />
         </div>
         
-        <!-- Rental Duration Input -->
         <div class="form-group">
             <label for="rental_duration">Rental Duration (Months)</label>
             <input
@@ -82,19 +45,16 @@
         </div>
   
 
-        <!-- Amount Input -->
         <div class="form-group">
           <label for="amount">Booking Amount (NPR)</label>
           <input type="number" name="amount" id="amount" required />
         </div>
 
-        <!--Total Amount input -->
         <div class="form-group">
           <label for="amount">Total Amount (NPR)</label>
           <input type="number" name="total_amount" id="total_amount" required />
         </div>
 
-        <!-- Hidden fields -->
         <input type="hidden" name="tax_amount" id="tax_amount" value="0" />
 
         <input
@@ -173,67 +133,52 @@
         <button type="submit">Pay with eSewa</button>
       </form>
     </div>
-
     <script>
-      console.log(location.pathname)
-      const pathname=location.pathname
-      const tempArray= pathname.split('/')
-      const room_id = tempArray[tempArray.length-2]
-      // Function to auto-generate signature
-      // Function to auto-generate signature
-        function generateSignature() {
-            var currentTime = new Date();
-            var formattedTime =
-            currentTime.toISOString().slice(2, 10).replace(/-/g, "") +
-            "-" +
-            currentTime.getHours() +
-            currentTime.getMinutes() +
-            currentTime.getSeconds();
-            document.getElementById("transaction_uuid").value = formattedTime;
-        
-            var total_amount = document.getElementById("total_amount").value;
-            var transaction_uuid =
-            document.getElementById("transaction_uuid").value;
-            var product_code = document.getElementById("product_code").value;
-            var secret = "8gBm/:&EnhH.1/q";
-        
-            var hash = CryptoJS.HmacSHA256(
-            `total_amount=${total_amount},transaction_uuid=${transaction_uuid},product_code=${product_code}`,
-            `${secret}`
-            );
-            var hashInBase64 = CryptoJS.enc.Base64.stringify(hash);
-            document.getElementById("signature").value = hashInBase64;
-        
-            const name = document.getElementById("name").value;
-            const email = document.getElementById("email").value;
-            const phone = document.getElementById("phone").value;
-            const move_in_date = document.getElementById("move_in_date").value;
-            const rental_duration = document.getElementById("rental_duration").value;
-        
-            document.getElementById("success_url").value = `http://localhost:8000/success/name/${name}/email/${email}/room_id/${room_id}/phone/${phone}/move_in_date/${move_in_date}/rental_duration/${rental_duration}`;
-        }
-  
-
-      // Event listeners to call generateSignature() when inputs are changed
-      document
-        .getElementById("total_amount")
-        .addEventListener("input", generateSignature);
-      document
-        .getElementById("transaction_uuid")
-        .addEventListener("input", generateSignature);
-      document
-        .getElementById("product_code")
-        .addEventListener("input", generateSignature);
-      document
-        .getElementById("secret")
-        .addEventListener("input", generateSignature);
+      console.log(location.pathname);
+      const pathname = location.pathname;
+      const tempArray = pathname.split('/');
+      const room_id = tempArray[tempArray.length - 2];
+    
+      function generateSignature() {
+        var currentTime = new Date();
+        var formattedTime =
+          currentTime.toISOString().slice(2, 10).replace(/-/g, "") +
+          "-" +
+          currentTime.getHours() +
+          currentTime.getMinutes() +
+          currentTime.getSeconds();
+        document.getElementById("transaction_uuid").value = formattedTime;
+    
+        var total_amount = document.getElementById("total_amount").value;
+        var transaction_uuid = document.getElementById("transaction_uuid").value;
+        var product_code = document.getElementById("product_code").value;
+        var secret = "8gBm/:&EnhH.1/q";
+    
+        var hash = CryptoJS.HmacSHA256(
+          `total_amount=${total_amount},transaction_uuid=${transaction_uuid},product_code=${product_code}`,
+          `${secret}`
+        );
+        var hashInBase64 = CryptoJS.enc.Base64.stringify(hash);
+        document.getElementById("signature").value = hashInBase64;
+    
+        const move_in_date = document.getElementById("move_in_date").value;
+        const rental_duration = document.getElementById("rental_duration").value;
+    
+        document.getElementById("success_url").value = 
+          `http://localhost:8000/success/move_in_date/${move_in_date}/rental_duration/${rental_duration}/room_id/${room_id}`;
+      }
+    
+      document.getElementById("total_amount").addEventListener("input", generateSignature);
+      document.getElementById("transaction_uuid").addEventListener("input", generateSignature);
+      document.getElementById("product_code").addEventListener("input", generateSignature);
     </script>
+    
   </body>
   
   <style>
     body {
       font-family: Arial, sans-serif;
-      background-color: #f4f4f4;
+        background-color: #141423;
       justify-content: center;
       align-items: center;
     }

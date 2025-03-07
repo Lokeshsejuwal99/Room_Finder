@@ -48,7 +48,7 @@ urlpatterns = [
     path('admin_feedbacks/<int:feedback_id>/', feedback_detail, name='feedback_detail'),
     path('logout/', Logout, name='logout'),
     path('payment/<int:id>/', book_room, name='initiate_payment'),
-    path('success/name/<str:name>/email/<str:email>/room_id/<int:room_id>/phone/<str:phone>/move_in_date/<str:move_in_date>/rental_duration/<str:rental_duration>/', payment_success, name='esewa_success'),
+    path("success/move_in_date/<str:move_in_date>/rental_duration/<str:rental_duration>/room_id/<int:room_id>/", payment_success, name="esewa_success"),
         # path('success/name/<str:name>/email/<str:email>/room_id/<int:room_id>/phone/<str:phone>/', payment_success, name='esewa_success'),
     path('failure/', payment_failure, name='esewa_failure'),
 

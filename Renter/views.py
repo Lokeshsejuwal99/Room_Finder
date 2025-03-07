@@ -1,10 +1,7 @@
 from django.http import JsonResponse
-from django.contrib import messages
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Renter, Booking, Room, Review
-from Landlord.models import Payment
 from django.contrib.auth.decorators import login_required
-from .forms import BookingForm
 from datetime import datetime
 from .decorators import renter_required
 from django.http import HttpResponse, HttpResponseBadRequest
@@ -12,9 +9,7 @@ from django.shortcuts import get_object_or_404
 import json
 from decimal import Decimal
 import base64
-from time import timezone
 import uuid
-from urllib.parse import urlencode
 
 
 @login_required
@@ -28,37 +23,6 @@ def renter_home(request):
         'my_bookings': my_bookings
     }
  return render(request, 'renter/renter_home.html', context)
-
-
-# @login_required
-# def book_room(request, room_id):
-#     room = get_object_or_404(Room, id=room_id)
-    
-#     try:
-#         renter_profile = request.user.renter
-#     except Renter.DoesNotExist:
-#         return redirect('some_error_page')
-
-#     if request.method == 'POST':
-#         form = BookingForm(request.POST)
-#         if form.is_valid():
-#             booking = form.save(commit=False)
-#             booking.room = room
-#             booking.renter = renter_profile
-#             booking.save()
-            
-#             print(f"Booking_id: {booking.id}")
-#             if booking.id:
-#                 return redirect('booking_confirmation', booking_id=booking.id)
-#             else:
-#                 print("Booking ID is not available!")
-
-#         else:
-#             print(form.errors)
-#     else:
-#         form = BookingForm()
-
-#     return render(request, 'renter/book_now.html', {'room': room, 'form': form})
 
 
 @login_required
@@ -100,8 +64,6 @@ def cancel_booking(request, booking_id):
     booking.room.save()
 
     booking.delete()
-    
-    messages.success(request, "Your booking has been canceled. The room is now available again.")
     return redirect("view_rooms")
 
 @login_required
@@ -156,12 +118,11 @@ def submit_review(request, room_id):
     return JsonResponse({"success": False})
 
 
-
 def book_room(request, id):
-    if request.method == 'GET':  # ✅ Allow GET requests
-        return render(request, 'renter/book_now.html', {'room_id': id})  # Render form
+    if request.method == 'GET':
+        return render(request, 'renter/book_now.html', {'room_id': id})
 
-    elif request.method == 'POST':  # ✅ Handle form submission
+    elif request.method == 'POST':
         amount = request.POST.get('amount')
         room_id = request.POST.get('room_id')
 
@@ -191,7 +152,7 @@ def book_room(request, id):
 
     return HttpResponse("Invalid request method.", status=405)
     
-def payment_success(request, name, email, room_id, phone, move_in_date, rental_duration):
+def payment_success(request, move_in_date, rental_duration, room_id):
     encoded_str = request.GET.get('data')
 
     if not encoded_str:
@@ -202,7 +163,7 @@ def payment_success(request, name, email, room_id, phone, move_in_date, rental_d
         decoded_str = decoded_bytes.decode('utf-8')
         decoded_json = json.loads(decoded_str)
 
-        amount = decoded_json.get('total_amount', '0').replace(',', '')  # Clean amount
+        amount = decoded_json.get('total_amount', '0').replace(',', '')
         transaction_id = decoded_json.get("transaction_uuid")
         payment_amount = Decimal(amount)
 
@@ -216,10 +177,12 @@ def payment_success(request, name, email, room_id, phone, move_in_date, rental_d
     room.total_booked_amount += payment_amount
     room.save()
 
-    renter = get_object_or_404(Renter, user__email=email)
+    if not request.user.is_authenticated:
+        return HttpResponseBadRequest("User is not authenticated")
+
+    renter = get_object_or_404(Renter, user=request.user)    
     renter.save()
 
-    # Save booking details
     Booking.objects.create(
         room=room,
         renter=renter,
@@ -235,7 +198,6 @@ def payment_success(request, name, email, room_id, phone, move_in_date, rental_d
         'amount': payment_amount,
         'room': room,
         'renter': renter,
-        'phone': phone,
         'move_in_date': move_in_date,
         'rental_duration': rental_duration, 
     }
